@@ -16,10 +16,9 @@ class Reader {
 
         try
         {
-            while(in.available()> 0x0)//convert to hex for bytes maybe???????
+            while(in.available()> 0x0)// end of file
             {
                 bytes [i] = in.readByte();
-
             }
             System.out.println((char)bytes[128]);
 
