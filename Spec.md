@@ -81,13 +81,21 @@ The total is e0 7f 10 00 4f 57 00 00 80 40 08 00 next two bytes are pixel number
 
 So to check end of header we will need to write a method that takes in byte array and another byte array contaning the bytes above we want to find just the index in the original array where it occurs.
 
-one example is
-Knuth-Morris-Pratt Pattern Matching Algorithm
-http://helpdesk.objects.com.au/java/search-a-byte-array-for-a-byte-sequence
-can be used to search a byte array for the index of the first occurance of a byte sequence
+To check for this we will check the array as array list to see if it contains the smaller array list of the end of header information.
 
 we need to find a byte sequence for row size column size and then the index of the end of header or OW other word value representation.
+
 
 so from e0 above plus 12 will be the first pixel data.
 
 --------------------------------------------------------
+
+## Pixel
+
+The pixel are little endian format this is effectively backwards to how we would read it in this means that we have to read in two bytes and perform a bit wise operation to put them the right way round for us to interpurt (2nd byte first). We will have to mask off some unused bits using AND operations.
+
+We will make a class Pixel to encapsulate this idea. It will take in two bytes as parameters in the constructor and will either perform bitwise operation here or in a separate method depending on how we wish to access pixel information.
+
+A data structure either array or 2d array will be used to store all Pixel objects. 
+
+When the necessary corrections have been made to the corrupt pixel values we will need a method to reverse the bitwise operations to return two bytes. These bytes will then be returned in the correct order(Little Endian) into the array containing the header file this allows for a new DICOM image to be correctly generated.
