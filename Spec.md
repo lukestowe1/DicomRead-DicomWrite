@@ -108,6 +108,6 @@ When the necessary corrections have been made to the corrupt pixel values we wil
 - Edge Detection
 - Inspection of Corrupt Data
 - Algorithm to fix corrupt data
-- 
+
 
 ---------------------------------------------------------
