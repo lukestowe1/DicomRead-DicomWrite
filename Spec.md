@@ -99,3 +99,15 @@ We will make a class Pixel to encapsulate this idea. It will take in two bytes a
 A data structure either array or 2d array will be used to store all Pixel objects. 
 
 When the necessary corrections have been made to the corrupt pixel values we will need a method to reverse the bitwise operations to return two bytes. These bytes will then be returned in the correct order(Little Endian) into the array containing the header file this allows for a new DICOM image to be correctly generated.
+
+----------------------------------------------------------
+
+## Plans To Be Completed ASAP
+- Pixel Class
+- Methods for bitwise operations(Pixel Class)
+- Edge Detection
+- Inspection of Corrupt Data
+- Algorithm to fix corrupt data
+- 
+
+---------------------------------------------------------
