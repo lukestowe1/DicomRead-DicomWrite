@@ -21,7 +21,7 @@ class Reader {
          (byte)0x57,(byte)0x00,(byte)0x00,(byte)0x80,(byte)0x40,(byte)0x08,(byte)0x00};//520
 
         int pSize = 520;
-        int [][]pixelData = new int[pSize][pSize];
+        Pixel [][]pixelData = new Pixel[pSize][pSize];
 
         //handle writing back to a file
         BufferedOutputStream o =new BufferedOutputStream(new FileOutputStream("im2.dcm"));
@@ -42,18 +42,15 @@ class Reader {
             for(int i = 0; i < pSize ; i++)
             {
                 for(int j = 0; j < pSize*2;j+=2) { //increment by two so dont merge wrong bytes
-                    int firstPix = (bytes[pixelStart+1]) & 0xFFFF; //& 0x0FFF | (bytes[293548]  ))& 0xFFFF;
-                    firstPix = firstPix << 8;
-                    int e = (bytes[pixelStart]) & 0xff;
-                    firstPix = firstPix | e;
-                    pixelData[i][j/2]=firstPix;
+
+                    Pixel p = new Pixel(bytes[pixelStart+1],bytes[pixelStart]);
+                    pixelData[i][j/2]=p;
                     pixelStart+=2;
-                    System.out.println(j/2);
                 }
-                System.out.println(i);
+
             }
 
-            System.out.println(pixelData[250][300]);
+            System.out.println(pixelData[250][300].getPixelValue());
 
             //test to change byte value from D to I
             bytes[128]=73;
