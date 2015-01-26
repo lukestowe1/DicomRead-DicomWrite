@@ -22,7 +22,8 @@ class Reader {
 
         int pSize = 520;
         int positionToWrite=0;
-        Pixel [][]pixelData = new Pixel[pSize][pSize];
+        int pixelStart=0;
+
 
         //handle writing back to a file
         BufferedOutputStream o =new BufferedOutputStream(new FileOutputStream("im2.dcm"));
@@ -33,10 +34,21 @@ class Reader {
             while(in.available() > 0)// end of file + count size
             {
                 bytes [count] = in.readByte();
-
                 count++;
             }
-            int pixelStart=Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead2))+endOfhead2.length;
+            if(Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead2))+endOfhead2.length > 12)
+            {
+                 pixelStart = Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead2))+endOfhead2.length;
+                 pSize = 520;
+            }
+
+            else
+            {
+                 pixelStart=Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead1))+endOfhead1.length;
+                 pSize = 512;
+            }
+
+            Pixel [][]pixelData = new Pixel[pSize][pSize];
             positionToWrite=pixelStart;
             System.out.println("Pixel values start at : "+pixelStart);
 
