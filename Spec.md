@@ -103,6 +103,7 @@ When the necessary corrections have been made to the corrupt pixel values we wil
 Pixel class has bytes first second if pixelValue has not been changed then these can just be pulled out and written back into the array of everything with "second" being written first to accomadate little endian
 
 However if the value has been changed we will need a bitwise operator. first we copy the int then we mask off 8 bits and write that into a byte then mask off the opposite 8 bits in the copy and store in a byte then these will have to be written in the write order back out to the main array.
+
 ----------------------------------------------------------
 
 ## Plans To Be Completed ASAP
