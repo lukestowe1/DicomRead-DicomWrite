@@ -21,6 +21,10 @@ public class Pixel {
     {
         return pixelValue;
     }
+    void setPixelValue(int newValue)
+    {
+        pixelValue=newValue;
+    }
 
 
 

@@ -100,6 +100,9 @@ A data structure either array or 2d array will be used to store all Pixel object
 
 When the necessary corrections have been made to the corrupt pixel values we will need a method to reverse the bitwise operations to return two bytes. These bytes will then be returned in the correct order(Little Endian) into the array containing the header file this allows for a new DICOM image to be correctly generated.
 
+Pixel class has bytes first second if pixelValue has not been changed then these can just be pulled out and written back into the array of everything with "second" being written first to accomadate little endian
+
+However if the value has been changed we will need a bitwise operator. first we copy the int then we mask off 8 bits and write that into a byte then mask off the opposite 8 bits in the copy and store in a byte then these will have to be written in the write order back out to the main array.
 ----------------------------------------------------------
 
 ## Plans To Be Completed ASAP

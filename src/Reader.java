@@ -1,6 +1,6 @@
 /*
 Author Luke Stowe
-Tag Along Ashley Robert Deane
+Author Ashley Deane
  */
 
 
@@ -21,6 +21,7 @@ class Reader {
          (byte)0x57,(byte)0x00,(byte)0x00,(byte)0x80,(byte)0x40,(byte)0x08,(byte)0x00};//520
 
         int pSize = 520;
+        int positionToWrite=0;
         Pixel [][]pixelData = new Pixel[pSize][pSize];
 
         //handle writing back to a file
@@ -36,6 +37,7 @@ class Reader {
                 count++;
             }
             int pixelStart=Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead2))+endOfhead2.length;
+            positionToWrite=pixelStart;
             System.out.println("Pixel values start at : "+pixelStart);
 
 
