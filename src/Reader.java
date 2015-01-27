@@ -29,41 +29,64 @@ class Reader {
         BufferedOutputStream o =new BufferedOutputStream(new FileOutputStream("Output.dcm"));
         DataOutputStream out = new DataOutputStream(o);
         int count = 0;
-        try
-        {
-            while(in.available() > 0)// end of file + count size
+        try {
+            while (in.available() > 0)// end of file + count size
             {
-                bytes [count] = in.readByte();
+                bytes[count] = in.readByte();
                 count++;
             }
-            if(Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead2))+endOfhead2.length > 12)
-            {
-                 pixelStart = Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead2))+endOfhead2.length;
-                 pSize = 520;
+            if (Collections.indexOfSubList(Arrays.asList(bytes), Arrays.asList(endOfhead2)) + endOfhead2.length > 12) {
+                pixelStart = Collections.indexOfSubList(Arrays.asList(bytes), Arrays.asList(endOfhead2)) + endOfhead2.length;
+                pSize = 520;
+            } else {
+                pixelStart = Collections.indexOfSubList(Arrays.asList(bytes), Arrays.asList(endOfhead1)) + endOfhead1.length;
+                pSize = 512;
             }
 
-            else
-            {
-                 pixelStart=Collections.indexOfSubList(Arrays.asList(bytes),Arrays.asList(endOfhead1))+endOfhead1.length;
-                 pSize = 512;
-            }
+            Pixel[][] pixelData = new Pixel[pSize][pSize];
+            positionToWrite = pixelStart;  //position to write back to
+            System.out.println("Pixel values start at : " + pixelStart);
 
-            Pixel [][]pixelData = new Pixel[pSize][pSize];
-            positionToWrite=pixelStart;
-            System.out.println("Pixel values start at : "+pixelStart);
+            int [][]metalHalves = new int [100][2];
+            int count2 =0;
+            int arrayCount=0;
+            int flag=1;
+            //int[][] metal = new int[pSize][pSize];
+            for (int i = 0; i < pSize; i++) {
+                for (int j = 0; j < pSize * 2; j += 2) { //increment by two so dont merge wrong bytes
+                    Pixel p = new Pixel(bytes[pixelStart + 1], bytes[pixelStart]);
+                    pixelData[i][j / 2] = p;
+                    pixelStart += 2;
+                    if (p.getPixelValue() > 4000) {
+                        //metal[i][j/2]=1;
+                        count2++;
+                        flag=0;
+                    }
+                    else
+                    {
+                        if(flag==0)
+                        {
+                            metalHalves[arrayCount][1]=(j/2)-(count2/2);
+                            metalHalves[arrayCount][0]=i;
+                            count2=0;
+                            arrayCount++;
+                            flag=1;
+                        }
+                        //metal[i][j/2]=0;
 
-
-            for(int i = 0; i < pSize ; i++)
-            {
-                for(int j = 0; j < pSize*2;j+=2) { //increment by two so dont merge wrong bytes
-                    Pixel p = new Pixel(bytes[pixelStart+1],bytes[pixelStart]);
-                    pixelData[i][j/2]=p;
-                    pixelStart+=2;
+                    }
                 }
+            }
+            for(int i = 0; i<30;i++)
+            {
+                for(int j = 0 ; j<1;j++)
+                {
+                    System.out.println(halves[i][j]+" "+halves[i][j+1]);
 
+                }
             }
 
-            System.out.println(pixelData[350][300].getPixelValue());
+
 
 
             for(int i=0;i<50000;i++)
