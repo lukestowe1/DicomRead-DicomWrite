@@ -81,7 +81,7 @@ class Reader {
             {
                 for(int j = 0 ; j<1;j++)
                 {
-                    System.out.println(halves[i][j]+" "+halves[i][j+1]);
+                    System.out.println(metalHalves[i][j]+" "+metalHalves[i][j+1]);
 
                 }
             }
