@@ -65,9 +65,9 @@ class Reader {
                         if (flag == 0)//after metal has been detected calculate horizontal middle value
                         {
 
-                                metalHalves[arrayCount][1] = (j / 2) - (count2 / 2);
-                                metalHalves[arrayCount][0] = i;
-                                arrayCount++;
+                            metalHalves[arrayCount][1] = (j / 2) - (count2 / 2);
+                            metalHalves[arrayCount][0] = i;
+                            arrayCount++;
 
 
                             count2 = 0;
@@ -79,14 +79,15 @@ class Reader {
                     }
                 }
             }
+            //first sort
             Arrays.sort(metalHalves, new Comparator<int[]>() {
                 @Override
                 public int compare(final int[] entry1, final int[] entry2) {
                     final int x1 = entry1[1];
                     final int x2 = entry2[1];
-                    if(x1 < x2)
+                    if (x1 < x2)
                         return 1;
-                    else if(x1 == x2)
+                    else if (x1 == x2)
                         return 0;
                     else
                         return -1;
@@ -95,17 +96,14 @@ class Reader {
             });
 
 
-
-
-
+            //second sort metal
             int[][] finalMetal = new int[4][20];
             finalMetal[0][0] = metalHalves[0][1];
             finalMetal[0][1] = metalHalves[0][0];
-            for(int i = 2,j = 1,k = 0; k < 3 && j < 100; i++, j++){
-                if(metalHalves[j][1] != 0 && (metalHalves[j][1] >= finalMetal[k][0]-5 && metalHalves[j][1] <= finalMetal[k][0]+5)){
+            for (int i = 2, j = 1, k = 0; k < 3 && j < 100; i++, j++) {
+                if (metalHalves[j][1] != 0 && (metalHalves[j][1] >= finalMetal[k][0] - 5 && metalHalves[j][1] <= finalMetal[k][0] + 5)) {
                     finalMetal[k][i] = metalHalves[j][0];
-                }
-                else if(metalHalves[j][1] != 0) {
+                } else if (metalHalves[j][1] != 0) {
                     k++;
                     j++;
                     i = 1;
@@ -113,69 +111,37 @@ class Reader {
                     finalMetal[k][1] = metalHalves[j][0];
                 }
 
-            }
-            int [][] medians = new int [4][2];
-            for(int i =0; i < 4; i++)
-            {
+            }//get single coordinate for each metal
+            int[][] medians = new int[4][2];
+            for (int i = 0; i < 4; i++) {
                 int pos = 0;
-                int countMedian=0;
-                for(int k = 1; k < 20 ;k++)
-                {
+                int countMedian = 0;
+                for (int k = 1; k < 20; k++) {
                     int x = finalMetal[i][k];
                     pos += x;
-                    if(x!=0)
-                    {
+                    if (x != 0) {
 
                         countMedian++;
                     }
 
                 }
-                if(countMedian!=0)
-                {
-                    medians[i][0]=pos/countMedian;
-                    medians[i][1]=finalMetal[i][0];
+                if (countMedian != 0) {
+                    medians[i][0] = pos / countMedian;
+                    medians[i][1] = finalMetal[i][0];
                 }
 
             }
-            //middle values now stored in median[i][0]=y and medians[i][1] =x
-            for(int i = 0; i < 4 ; i++)
-            {
-                for(int j =0; j<1;j++)
-                {
-                    System.out.println("y: "+medians[i][0]+" x: "+medians[i][1]);
-                }
-            }
 
 
+            Point p = new Point(medians[2][0], medians[2][1]);//y,x
+
+            //flood fill line detection
 
 
-            Point metal = new Point(medians[1][0],medians[1][1]);//y,x
-            Queue <Point>coord=new LinkedList<Point>();
-            coord.add(metal);
-            while(coord.remove()!=null){
-                Point p1 = coord.remove();
-                if(checkRange(pixelData[p1.getY()][p1.getX()+1])){//right
-                     p1 = new Point(p1.getY(),p1.getX()+1);
-                    coord.add(p1);//push
-                }
-                if(checkRange(pixelData[p1.getY()][p1.getX()-1]))//left
-                {
-                     p1 = new Point(p1.getY(),p1.getX()-1);
-                    coord.add(p1);//push
-                }
-                if(checkRange(pixelData[p1.getY()+1][p1.getX()]))//up
-                {
-                     p1 = new Point(p1.getY()+1,p1.getX());
-                    coord.add(p1);//push
-                }
-                if(checkRange(pixelData[p1.getY()-1][p1.getX()])) //down
-                {
-                     p1 = new Point(p1.getY()-1,p1.getX());
-                    coord.add(p1);
-                }
-            }
+            Queue<Point> streak =  flood(pixelData,p);
 
 
+            queuePrint(streak);//prink streak coordinates
 
 
             for (int i = 0; i < count; i++) {
@@ -192,6 +158,48 @@ class Reader {
 
 
     }
+
+
+    private static Queue flood(Pixel pixelData[][],Point p)
+    {
+        Point metal = p;
+        Queue<Point> streak = new LinkedList<Point>();
+        Queue <Point>coord=new LinkedList<Point>();
+        coord.add(metal);
+        streak.add(metal);
+        while(coord.peek()!=null){
+            Point p1 = coord.remove();
+            if(checkRange(pixelData[p1.getY()][p1.getX()+1])){//right
+                p1 = new Point(p1.getY(),p1.getX()+1);
+                pixelData[p1.getY()][p1.getX()].setPixelValue(0);
+                coord.add(p1);//push
+                streak.add(p1);
+            }
+            if(checkRange(pixelData[p1.getY()][p1.getX()-1]))//left
+            {
+                p1 = new Point(p1.getY(),p1.getX()-1);
+                pixelData[p1.getY()][p1.getX()].setPixelValue(0);
+                coord.add(p1);//push
+                streak.add(p1);
+            }
+            if(checkRange(pixelData[p1.getY()][p1.getX()]))//up
+            {
+                p1 = new Point(p1.getY()+1,p1.getX());
+                pixelData[p1.getY()+1][p1.getX()].setPixelValue(0);
+                coord.add(p1);//push
+                streak.add(p1);
+            }
+            if(checkRange(pixelData[p1.getY()-1][p1.getX()])) //down
+            {
+                p1 = new Point(p1.getY()-1,p1.getX());
+                pixelData[p1.getY()][p1.getX()].setPixelValue(0);
+                coord.add(p1);
+                streak.add(p1);
+            }
+
+        }
+        return streak;
+    }
     private static float getSlope(int y1, int x1, int y2, int x2){
         return (y1 - y2)/(x1 - x2);
     }
@@ -201,10 +209,17 @@ class Reader {
         //soft tissue(760-860)
         if (p.getPixelValue() >= 760 && p.getPixelValue() <= 900) {
             return true;
-        } else if (p.getPixelValue() > 4000) {
+        } else if (p.getPixelValue() > 4000) {//metal
             return true;
         } else {
             return false;
+        }
+    }
+    //print queue
+    private static void queuePrint(Queue<Point> streak){
+        System.out.println("Here");
+        for(Point s : streak){
+            System.out.println(s.getY() + "," + s.getX());
         }
     }
 
