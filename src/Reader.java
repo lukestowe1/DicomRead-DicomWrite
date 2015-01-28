@@ -5,10 +5,7 @@ Author Ashley Deane
 
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-
+import java.util.*;
 
 
 class Reader {
@@ -150,6 +147,37 @@ class Reader {
             }
 
 
+
+
+            Point metal = new Point(medians[1][0],medians[1][1]);//y,x
+            Queue <Point>coord=new LinkedList<Point>();
+            coord.add(metal);
+            while(coord.remove()!=null){
+                Point p1 = coord.remove();
+                if(checkRange(pixelData[p1.getY()][p1.getX()+1])){//right
+                     p1 = new Point(p1.getY(),p1.getX()+1);
+                    coord.add(p1);//push
+                }
+                if(checkRange(pixelData[p1.getY()][p1.getX()-1]))//left
+                {
+                     p1 = new Point(p1.getY(),p1.getX()-1);
+                    coord.add(p1);//push
+                }
+                if(checkRange(pixelData[p1.getY()+1][p1.getX()]))//up
+                {
+                     p1 = new Point(p1.getY()+1,p1.getX());
+                    coord.add(p1);//push
+                }
+                if(checkRange(pixelData[p1.getY()-1][p1.getX()])) //down
+                {
+                     p1 = new Point(p1.getY()-1,p1.getX());
+                    coord.add(p1);
+                }
+            }
+
+
+
+
             for (int i = 0; i < count; i++) {
                 //write to new  image
                 out.writeByte(bytes[i]);
@@ -164,4 +192,21 @@ class Reader {
 
 
     }
+    private static float getSlope(int y1, int x1, int y2, int x2){
+        return (y1 - y2)/(x1 - x2);
+    }
+    //check for flood fill
+    private static boolean checkRange(Pixel p) {
+        //bone(860-900)
+        //soft tissue(760-860)
+        if (p.getPixelValue() >= 760 && p.getPixelValue() <= 900) {
+            return true;
+        } else if (p.getPixelValue() > 4000) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
