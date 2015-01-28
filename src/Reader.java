@@ -53,7 +53,6 @@ class Reader {
             int count2 = 0;
             int arrayCount = 0;
             int flag = 1;
-            int flagFar=0;
 
             //int[][] metal = new int[pSize][pSize];
             for (int i = 0; i < pSize; i++) {
@@ -98,11 +97,55 @@ class Reader {
                 }
             });
 
-            for (int i = 0; i < 60; i++)//test print out middle values
-            {
-                for (int j = 0; j < 1; j++) {
-                    System.out.println(metalHalves[i][j] + " " + metalHalves[i][j + 1]);
 
+
+
+
+            int[][] finalMetal = new int[4][20];
+            finalMetal[0][0] = metalHalves[0][1];
+            finalMetal[0][1] = metalHalves[0][0];
+            for(int i = 2,j = 1,k = 0; k < 3 && j < 100; i++, j++){
+                if(metalHalves[j][1] != 0 && (metalHalves[j][1] >= finalMetal[k][0]-5 && metalHalves[j][1] <= finalMetal[k][0]+5)){
+                    finalMetal[k][i] = metalHalves[j][0];
+                }
+                else if(metalHalves[j][1] != 0) {
+                    k++;
+                    j++;
+                    i = 1;
+                    finalMetal[k][0] = metalHalves[j][1];
+                    finalMetal[k][1] = metalHalves[j][0];
+                }
+
+            }
+            int [][] medians = new int [4][2];
+            for(int i =0; i < 4; i++)
+            {
+                int pos = 0;
+                int countMedian=0;
+                for(int k = 1; k < 20 ;k++)
+                {
+                    int x = finalMetal[i][k];
+                    pos += x;
+                    if(x!=0)
+                    {
+
+                        countMedian++;
+                    }
+
+                }
+                if(countMedian!=0)
+                {
+                    medians[i][0]=pos/countMedian;
+                    medians[i][1]=finalMetal[i][0];
+                }
+
+            }
+            //middle values now stored in median[i][0]=y and medians[i][1] =x
+            for(int i = 0; i < 4 ; i++)
+            {
+                for(int j =0; j<1;j++)
+                {
+                    System.out.println("y: "+medians[i][0]+" x: "+medians[i][1]);
                 }
             }
 
