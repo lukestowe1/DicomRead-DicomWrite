@@ -7,6 +7,8 @@ Author Ashley Deane
 import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+
 
 
 class Reader {
@@ -66,30 +68,12 @@ class Reader {
                     } else {
                         if (flag == 0)//after metal has been detected calculate horizontal middle value
                         {
-                            int k = (j/2) - (count2/2);
 
-                            if(arrayCount!=0 && (k < (metalHalves[0][1]-15) || k > (metalHalves[0][1]+15))) {
-
-                                metalHalves[arrayCount+20][1] = (j / 2) - (count2 / 2);
-                                metalHalves[arrayCount+20][0] = i;
-                                flagFar++;
-                                if(flagFar<1)
-                                {
-                                    arrayCount++;
-                                }
-                                else
-                                {
-                                    flagFar=0;
-                                }
-
-                            }
-                            else
-                            {
                                 metalHalves[arrayCount][1] = (j / 2) - (count2 / 2);
                                 metalHalves[arrayCount][0] = i;
                                 arrayCount++;
 
-                            }
+
                             count2 = 0;
 
                             flag = 1;//reset the flag
@@ -99,6 +83,21 @@ class Reader {
                     }
                 }
             }
+            Arrays.sort(metalHalves, new Comparator<int[]>() {
+                @Override
+                public int compare(final int[] entry1, final int[] entry2) {
+                    final int x1 = entry1[1];
+                    final int x2 = entry2[1];
+                    if(x1 < x2)
+                        return 1;
+                    else if(x1 == x2)
+                        return 0;
+                    else
+                        return -1;
+
+                }
+            });
+
             for (int i = 0; i < 60; i++)//test print out middle values
             {
                 for (int j = 0; j < 1; j++) {
