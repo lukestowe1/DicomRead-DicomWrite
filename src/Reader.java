@@ -51,6 +51,8 @@ class Reader {
             int count2 = 0;
             int arrayCount = 0;
             int flag = 1;
+            int flagFar=0;
+
             //int[][] metal = new int[pSize][pSize];
             for (int i = 0; i < pSize; i++) {
                 for (int j = 0; j < pSize * 2; j += 2) { //increment by two so dont merge wrong bytes
@@ -64,10 +66,32 @@ class Reader {
                     } else {
                         if (flag == 0)//after metal has been detected calculate horizontal middle value
                         {
-                            metalHalves[arrayCount][1] = (j / 2) - (count2 / 2);
-                            metalHalves[arrayCount][0] = i;
+                            int k = (j/2) - (count2/2);
+
+                            if(arrayCount!=0 && (k < (metalHalves[0][1]-15) || k > (metalHalves[0][1]+15))) {
+
+                                metalHalves[arrayCount+20][1] = (j / 2) - (count2 / 2);
+                                metalHalves[arrayCount+20][0] = i;
+                                flagFar++;
+                                if(flagFar<1)
+                                {
+                                    arrayCount++;
+                                }
+                                else
+                                {
+                                    flagFar=0;
+                                }
+
+                            }
+                            else
+                            {
+                                metalHalves[arrayCount][1] = (j / 2) - (count2 / 2);
+                                metalHalves[arrayCount][0] = i;
+                                arrayCount++;
+
+                            }
                             count2 = 0;
-                            arrayCount++;
+
                             flag = 1;//reset the flag
                         }
                         //metal[i][j/2]=0;
@@ -75,7 +99,7 @@ class Reader {
                     }
                 }
             }
-            for (int i = 0; i < 30; i++)//test print out middle values
+            for (int i = 0; i < 60; i++)//test print out middle values
             {
                 for (int j = 0; j < 1; j++) {
                     System.out.println(metalHalves[i][j] + " " + metalHalves[i][j + 1]);
@@ -84,7 +108,7 @@ class Reader {
             }
 
 
-            for (int i = 0; i < 50000; i++) {
+            for (int i = 0; i < count; i++) {
                 //write to new  image
                 out.writeByte(bytes[i]);
             }
