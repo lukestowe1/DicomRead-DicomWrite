@@ -22,7 +22,9 @@ public class Point {
     {
         return slope;
     }
-
+    float returnPerpendicular(){
+        return 0-(1/slope);
+    }
     float getSlope(int y1, int x1){
         double x = x1 - this.x;
         double y = y1 - this.y;
@@ -40,4 +42,5 @@ public class Point {
         }
 
     }
+
 }
