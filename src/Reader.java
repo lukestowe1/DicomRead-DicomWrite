@@ -43,6 +43,7 @@ class Reader {
             }
 
             Pixel[][] pixelData = new Pixel[pSize][pSize];//take in pixel objects
+
             positionToWrite = pixelStart;  //position to write back to
             System.out.println("Pixel values start at : " + pixelStart);
 
@@ -56,6 +57,7 @@ class Reader {
                 for (int j = 0; j < pSize * 2; j += 2) { //increment by two so dont merge wrong bytes
                     Pixel p = new Pixel(bytes[pixelStart + 1], bytes[pixelStart]);//change every byte to Pixel
                     pixelData[i][j / 2] = p;
+
                     pixelStart += 2;
                     if (p.getPixelValue() > 4000) {//detect for metal object
                         //metal[i][j/2]=1;
@@ -131,17 +133,51 @@ class Reader {
                 }
 
             }
+            System.out.println(" "+medians[1][1]+" "+medians[1][0]);
+            List<Point> zeros = new ArrayList<Point>();
+            Point p = new Point(0,0);
+            for(int i = 0 ;i < 390;i++)
+            {
+                for(int j = 0; j<pSize;j++)
+                {
+                    p=new Point(i,j);
+                    if(pixelData[i][j].getPixelValue()==0)
+                    {
+                        float t = p.getSlope(medians[1][0], medians[1][1]);
+                        if(t>-0.5&&t<0.5)
+                            System.out.println("slope of zero"+ i + " "+j);
+                        /*if(t >=1.5 && t <=2)
+                            System.out.println("hhhh "+ i +" "+j);
+                        if(j==130)
+                            System.out.println("should get 50 next");
+                        if(t==500)
+                            System.out.println("bbbb "+ i +" "+ j);*/
+                        if(!zeros.contains(p))
+                            zeros.add(p);
+
+                    }
+
+                }
+            }
+
+            Collections.sort(zeros, new Comparator<Point>() {
+                @Override
+                public int compare(Point  p1, Point  p2)
+                {
+                    if(p1.returnSlope()>p2.returnSlope())
+                        return 1;
+                    else
+                        return -1;
+                }
+            });
+            /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
+            float t = getSlope(medians[1][0],medians[1][1],240,99);
+            System.out.println(t);*/
 
 
-            Point p = new Point(medians[2][0], medians[2][1]);//y,x
 
-            //flood fill line detection
-
-
-            Queue<Point> streak =  flood(pixelData,p);
-
-
-            queuePrint(streak);//prink streak coordinates
+            //Queue<Point> streak =  flood(pixelData,p);
+            queuePrint(zeros);//prink streak coordinates
 
 
             for (int i = 0; i < count; i++) {
@@ -160,7 +196,8 @@ class Reader {
     }
 
 
-    private static Queue flood(Pixel pixelData[][],Point p)
+    /*
+    private static Queue flood(Pixel test[][],Point p)
     {
         Point metal = p;
         Queue<Point> streak = new LinkedList<Point>();
@@ -169,41 +206,51 @@ class Reader {
         streak.add(metal);
         while(coord.peek()!=null){
             Point p1 = coord.remove();
-            if(checkRange(pixelData[p1.getY()][p1.getX()+1])){//right
+            if(checkRange(test[p1.getY()][p1.getX()])){//current
+                p1=new Point(p1.getY(),p1.getX());
+                test[p1.getY()][p1.getX()].setPixelValue(-1);
+                coord.add(p1);
+                streak.add(p1);
+            }
+            if(checkRange(test[p1.getY()][p1.getX()+1])){//right
                 p1 = new Point(p1.getY(),p1.getX()+1);
-                pixelData[p1.getY()][p1.getX()].setPixelValue(0);
+                test[p1.getY()][p1.getX()].setPixelValue(-1);
                 coord.add(p1);//push
                 streak.add(p1);
             }
-            if(checkRange(pixelData[p1.getY()][p1.getX()-1]))//left
+            if(checkRange(test[p1.getY()][p1.getX()-1]))//left
             {
                 p1 = new Point(p1.getY(),p1.getX()-1);
-                pixelData[p1.getY()][p1.getX()].setPixelValue(0);
+                test[p1.getY()][p1.getX()].setPixelValue(-1);
                 coord.add(p1);//push
                 streak.add(p1);
             }
-            if(checkRange(pixelData[p1.getY()][p1.getX()]))//up
+            if(checkRange(test[p1.getY()][p1.getX()]))//up
             {
                 p1 = new Point(p1.getY()+1,p1.getX());
-                pixelData[p1.getY()+1][p1.getX()].setPixelValue(0);
+                test[p1.getY()+1][p1.getX()].setPixelValue(-1);
                 coord.add(p1);//push
                 streak.add(p1);
             }
-            if(checkRange(pixelData[p1.getY()-1][p1.getX()])) //down
+            if(checkRange(test[p1.getY()-1][p1.getX()])) //down
             {
                 p1 = new Point(p1.getY()-1,p1.getX());
-                pixelData[p1.getY()][p1.getX()].setPixelValue(0);
+                test[p1.getY()][p1.getX()].setPixelValue(-4);
                 coord.add(p1);
                 streak.add(p1);
             }
 
         }
         return streak;
+    }*/
+    private static boolean equationLine(int y1, int x1 , int y2 ,int x2, float slope )
+    {
+        int m =(y1-y2)-(x1-x2);
+        return m==slope;
     }
-    private static float getSlope(int y1, int x1, int y2, int x2){
-        return (y1 - y2)/(x1 - x2);
-    }
+
     //check for flood fill
+
     private static boolean checkRange(Pixel p) {
         //bone(860-900)
         //soft tissue(760-860)
@@ -211,17 +258,22 @@ class Reader {
             return true;
         } else if (p.getPixelValue() > 4000) {//metal
             return true;
-        } else {
-            return false;
         }
+        else if(p.getPixelValue()==0)
+        {
+            return true;
+        }
+        else
+            return false;
     }
     //print queue
-    private static void queuePrint(Queue<Point> streak){
+    private static void queuePrint(List<Point> streak){
         System.out.println("Here");
         for(Point s : streak){
-            System.out.println(s.getY() + "," + s.getX());
+            System.out.println(s.returnSlope());
         }
     }
+
 
 
 }
