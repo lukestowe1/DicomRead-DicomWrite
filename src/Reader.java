@@ -217,6 +217,25 @@ class Reader {
                     zerosM2.remove(p1);
                 }
             }
+
+
+            //testing stuff
+            for(Point p3:zerosM1)
+            {
+                pixelData[p3.getY()][p3.getX()].setPixelValue(700000);
+            }
+            for(Point p3:zerosM2)
+            {
+                pixelData[p3.getY()][p3.getX()].setPixelValue(700000);
+            }
+            for(int i = 0; i< 300; i++)
+            {
+                for(int j = 100; j <500; j++ )
+                {
+                    System.out.printf("%5d ", pixelData[i][j].getPixelValue());
+                }
+                System.out.println();
+            }
             System.out.println(zerosM2.size());
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
             float t = getSlope(medians[1][0],medians[1][1],240,99);

@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b57ab76c-cee8-47f9-8c83-0682cea81979" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DicomFIx/Point.class" afterPath="$PROJECT_DIR$/out/production/DicomFIx/Point.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DicomFIx/Reader.class" afterPath="$PROJECT_DIR$/out/production/DicomFIx/Reader.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Output.dcm" afterPath="$PROJECT_DIR$/Output.dcm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Point.java" afterPath="$PROJECT_DIR$/src/Point.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Reader.java" afterPath="$PROJECT_DIR$/src/Reader.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -39,8 +36,8 @@
       <file leaf-file-name="Reader.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Reader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5588235" vertical-offset="2791" max-vertical-offset="3900">
-              <caret line="215" column="31" selection-start-line="215" selection-start-column="31" selection-end-line="215" selection-end-column="31" />
+            <state vertical-scroll-proportion="-8.178572" vertical-offset="3026" max-vertical-offset="4185">
+              <caret line="232" column="39" selection-start-line="232" selection-start-column="39" selection-end-line="232" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -496,12 +493,12 @@
       <workItem from="1422299772684" duration="5802000" />
       <workItem from="1422385485843" duration="38735000" />
       <workItem from="1422632878063" duration="570000" />
-      <workItem from="1422639659946" duration="666000" />
+      <workItem from="1422639659946" duration="2217000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78791000" />
+    <option name="totallyTimeSpent" value="80342000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -548,7 +545,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12732475" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45602164" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="1.0" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="7.153076E-4" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -944,8 +941,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Reader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5588235" vertical-offset="2791" max-vertical-offset="3900">
-          <caret line="215" column="31" selection-start-line="215" selection-start-column="31" selection-end-line="215" selection-end-column="31" />
+        <state vertical-scroll-proportion="-8.178572" vertical-offset="3026" max-vertical-offset="4185">
+          <caret line="232" column="39" selection-start-line="232" selection-start-column="39" selection-end-line="232" selection-end-column="39" />
           <folding />
         </state>
       </provider>
