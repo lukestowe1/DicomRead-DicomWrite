@@ -42,5 +42,13 @@ public class Point {
         }
 
     }
+    Point midpoint(Point p1)
+    {
+        int x = (this.x+p1.x)/2;
+        int y = (this.y+p1.y)/2;
+        return new Point(y,x);
+    }
+
+
 
 }

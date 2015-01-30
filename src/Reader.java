@@ -134,7 +134,8 @@ class Reader {
 
             }
             System.out.println(" "+medians[1][1]+" "+medians[1][0]);
-            List<Point> zeros = new ArrayList<Point>();
+            List<Point> zerosM1 = new LinkedList<Point>();
+            List<Point> zerosM2 = new ArrayList<Point>();
             Point p = new Point(0,0);
             for(int i = 0 ;i < 390;i++)
             {
@@ -144,23 +145,21 @@ class Reader {
                     if(pixelData[i][j].getPixelValue()==0)
                     {
                         float t = p.getSlope(medians[1][0], medians[1][1]);
-                        if(t>-0.5&&t<0.5)
-                            System.out.println("slope of zero"+ i + " "+j);
-                        /*if(t >=1.5 && t <=2)
-                            System.out.println("hhhh "+ i +" "+j);
-                        if(j==130)
-                            System.out.println("should get 50 next");
-                        if(t==500)
-                            System.out.println("bbbb "+ i +" "+ j);*/
-                        if(!zeros.contains(p))
-                            zeros.add(p);
+
+                        if(!zerosM1.contains(p))
+                            zerosM1.add(p);
+
+                        t = p.getSlope(medians[1][0], medians[1][1]);
+
+                        if(!zerosM2.contains(p))
+                            zerosM2.add(p);
 
                     }
 
                 }
             }
 
-            Collections.sort(zeros, new Comparator<Point>() {
+            Collections.sort(zerosM1, new Comparator<Point>() {
                 @Override
                 public int compare(Point  p1, Point  p2)
                 {
@@ -170,6 +169,33 @@ class Reader {
                         return -1;
                 }
             });
+            Collections.sort(zerosM2, new Comparator<Point>() {
+                @Override
+                public int compare(Point  p1, Point  p2)
+                {
+                    if(p1.returnSlope()>p2.returnSlope())
+                        return 1;
+                    else
+                        return -1;
+                }
+            });
+
+            //left metal
+            Point metal1 = new Point(medians[1][0],medians[1][1]);
+            for(Point p1 : zerosM1)
+            {
+                int checker=0;
+                Point mid = p1.midpoint(metal1);
+                while(checkRange(pixelData[mid.getY()][mid.getX()])==true||checker >4)
+                {
+                    mid = mid.midpoint(metal1);
+                    checker++;
+                }
+                if(checker < 4){
+                    zerosM1.remove(p1);
+                }
+            }
+
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
             float t = getSlope(medians[1][0],medians[1][1],240,99);
             System.out.println(t);*/
@@ -177,7 +203,7 @@ class Reader {
 
 
             //Queue<Point> streak =  flood(pixelData,p);
-            queuePrint(zeros);//prink streak coordinates
+            queuePrint(zerosM1);//prink streak coordinates
 
 
             for (int i = 0; i < count; i++) {
@@ -201,6 +227,18 @@ class Reader {
         System.out.println("Here");
         for(Point s : streak){
             System.out.println(s.returnSlope());
+        }
+    }
+    private static boolean checkRange(Pixel p) {
+        //soft tissue(760-860)
+        if (p.getPixelValue() >= 760 && p.getPixelValue() <= 900) {
+            return true;
+        } else if (p.getPixelValue() > 4000) {
+            return true;
+        } else if (p.getPixelValue() == 0) {//metal
+            return true;
+        } else {
+            return false;
         }
     }
 
