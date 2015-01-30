@@ -48,6 +48,11 @@ public class Point {
         int y = (this.y+p1.y)/2;
         return new Point(y,x);
     }
+    @Override
+    public boolean equals(Object p1){
+        Point p = (Point)p1;
+        return this.slope == p.slope;
+    }
 
 
 

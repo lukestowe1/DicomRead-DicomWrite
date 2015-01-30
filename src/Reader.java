@@ -181,21 +181,43 @@ class Reader {
             });
 
             //left metal
+            System.out.println(zerosM1.size());
             Point metal1 = new Point(medians[1][0],medians[1][1]);
-            for(Point p1 : zerosM1)
+            for(int i =0;i<zerosM1.size();i++)
             {
                 int checker=0;
+                Point p1 = zerosM1.get(i);
                 Point mid = p1.midpoint(metal1);
-                while(checkRange(pixelData[mid.getY()][mid.getX()])==true||checker >4)
+                while(checkRange(pixelData[mid.getY()][mid.getX()])==true && checker !=6)
                 {
                     mid = mid.midpoint(metal1);
                     checker++;
+
                 }
-                if(checker < 4){
+                if(checker !=6){
                     zerosM1.remove(p1);
                 }
             }
+            System.out.println("new size: "+zerosM1.size());
 
+            System.out.println(zerosM2.size());
+            Point metal2 = new Point(medians[0][0],medians[0][1]);
+            for(int i =0;i<zerosM2.size();i++)
+            {
+                int checker=0;
+                Point p1 = zerosM2.get(i);
+                Point mid = p1.midpoint(metal2);
+                while(checkRange(pixelData[mid.getY()][mid.getX()])==true && checker !=6)
+                {
+                    mid = mid.midpoint(metal2);
+                    checker++;
+
+                }
+                if(checker != 6 ){
+                    zerosM2.remove(p1);
+                }
+            }
+            System.out.println(zerosM2.size());
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
             float t = getSlope(medians[1][0],medians[1][1],240,99);
             System.out.println(t);*/
@@ -203,7 +225,7 @@ class Reader {
 
 
             //Queue<Point> streak =  flood(pixelData,p);
-            queuePrint(zerosM1);//prink streak coordinates
+            //queuePrint(zerosM1);//prink streak coordinates
 
 
             for (int i = 0; i < count; i++) {
