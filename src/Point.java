@@ -53,6 +53,11 @@ public class Point {
         Point p = (Point)p1;
         return this.slope == p.slope;
     }
+    public boolean equationLine(Point p, float slope)
+    {
+        int m =(this.y-p.y)-(this.x-p.x);
+        return m==this.slope;
+    }
 
 
 

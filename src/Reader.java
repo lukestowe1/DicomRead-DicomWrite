@@ -144,22 +144,37 @@ class Reader {
                     p=new Point(i,j);
                     if(pixelData[i][j].getPixelValue()==0)
                     {
-                        float t = p.getSlope(medians[1][0], medians[1][1]);
 
-                        if(!zerosM1.contains(p))
+                        Point p1 = new Point(i,j);
+                        int c1=i;
+                        if(pixelData[p.getY()+1][p.getX()].getPixelValue()!=0) {
+                            while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0) {
+                                p1 = new Point(c1--, j);
+                            }
+                            pixelData[p.getY()][p.getX()].setPixelValue(-10);
+                            pixelData[p1.getY()][p1.getX()].setPixelValue(-10);
+                            p = p.midpoint(p1);
+
+                            pixelData[p.getY()][p.getX()].setPixelValue(-1);
+                            float t = p.getSlope(medians[1][0], medians[1][1]);
+                            if(p.getX()==109)
+                            {
+                                System.out.println(t);
+                            }
                             zerosM1.add(p);
 
-                        t = p.getSlope(medians[1][0], medians[1][1]);
+                            t = p.getSlope(medians[1][0], medians[1][1]);
 
-                        if(!zerosM2.contains(p))
+
                             zerosM2.add(p);
+                        }
 
                     }
 
                 }
             }
 
-            Collections.sort(zerosM1, new Comparator<Point>() {
+           Collections.sort(zerosM1, new Comparator<Point>() {
                 @Override
                 public int compare(Point  p1, Point  p2)
                 {
@@ -188,6 +203,8 @@ class Reader {
                 int checker=0;
                 Point p1 = zerosM1.get(i);
                 Point mid = p1.midpoint(metal1);
+
+
                 while(checkRange(pixelData[mid.getY()][mid.getX()])==true && checker !=6)
                 {
                     mid = mid.midpoint(metal1);
@@ -220,14 +237,15 @@ class Reader {
 
 
             //testing stuff
+            /*
             for(Point p3:zerosM1)
             {
-                pixelData[p3.getY()][p3.getX()].setPixelValue(700000);
+                pixelData[p3.getY()][p3.getX()].setPixelValue(-1);
             }
             for(Point p3:zerosM2)
             {
                 pixelData[p3.getY()][p3.getX()].setPixelValue(700000);
-            }
+            }*/
             for(int i = 0; i< 300; i++)
             {
                 for(int j = 100; j <500; j++ )
@@ -244,7 +262,7 @@ class Reader {
 
 
             //Queue<Point> streak =  flood(pixelData,p);
-            //queuePrint(zerosM1);//prink streak coordinates
+            queuePrint(zerosM1);//prink streak coordinates
 
 
             for (int i = 0; i < count; i++) {
@@ -267,7 +285,8 @@ class Reader {
     private static void queuePrint(List<Point> streak){
         System.out.println("Here");
         for(Point s : streak){
-            System.out.println(s.returnSlope());
+            if(s.returnSlope()<=1.5 && s.returnSlope()>=1.4)
+            System.out.println(s.returnSlope()+ "x : " +s.getX()+" y : "+s.getY());
         }
     }
     private static boolean checkRange(Pixel p) {
