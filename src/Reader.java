@@ -151,11 +151,9 @@ class Reader {
                             while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0) {
                                 p1 = new Point(c1--, j);
                             }
-                            pixelData[p.getY()][p.getX()].setPixelValue(-10);
-                            pixelData[p1.getY()][p1.getX()].setPixelValue(-10);
+
                             p = p.midpoint(p1);
 
-                            pixelData[p.getY()][p.getX()].setPixelValue(-1);
                             float t = p.getSlope(medians[1][0], medians[1][1]);
                             if(p.getX()==109)
                             {
@@ -274,26 +272,35 @@ class Reader {
 
                             if (pixelData[i][k].getPixelValue() >= 700 && pixelData[i][k].getPixelValue() <= 860)//tissue fix
                             {
-                                pixelData[i][k].setPixelValue(-1);
+                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+300);
 
                             } else if (pixelData[i][k].getPixelValue() >= 870 && pixelData[i][k].getPixelValue() <= 960)//bone fix need to check 900 value
                             {
-                                pixelData[i][k].setPixelValue(-1);
+                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+100);
                             }
                         }
                     }
                 }
             }
+            System.out.println(bytes[300]+"  "+bytes[300+1]);
 
-            for(int i = 0; i< 300; i++)
+
+
+
+            for(int i = 0; i< pSize; i++)
             {
-                for(int j = 100; j <500; j++ )
+                for(int j = 0; j <pSize; j++ )
                 {
-                    System.out.printf("%5d ", pixelData[i][j].getPixelValue());
-                }
-                System.out.println();
-            }
+                    Byte fb = (byte)(pixelData[i][j].getPixelValue()&0xFF);
+                    Byte sb = (byte)((pixelData[i][j].getPixelValue()>>8)&0xFF);
+                    bytes[positionToWrite]=fb;
+                    bytes[positionToWrite+1]=sb;
+                    positionToWrite+=2;
 
+                }
+
+            }
+            System.out.println(bytes[300]+"  "+bytes[300+1]);
             for (int i = 0; i < count; i++) {
                 //write to new  image
                 out.writeByte(bytes[i]);
