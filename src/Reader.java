@@ -263,7 +263,36 @@ class Reader {
 
             //Queue<Point> streak =  flood(pixelData,p);
             queuePrint(zerosM1);//prink streak coordinates
+            //Point pix = new Point(180,88);
+            //pix.getSlope(medians[1][0],medians[1][1]);
+            Point pix2 = new Point(0,0);
+            for(Point pix: zerosM1) {
+                for (int i = 0; i < pSize; i++) {
+                    for (int k = 0; k < pSize; k++) {
+                        pix2 = new Point(i, k);
+                        if (pix.equationLine(pix2, pix.returnSlope())) {
 
+                            if (pixelData[i][k].getPixelValue() >= 700 && pixelData[i][k].getPixelValue() <= 860)//tissue fix
+                            {
+                                pixelData[i][k].setPixelValue(-1);
+
+                            } else if (pixelData[i][k].getPixelValue() >= 870 && pixelData[i][k].getPixelValue() <= 960)//bone fix need to check 900 value
+                            {
+                                pixelData[i][k].setPixelValue(-1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(int i = 0; i< 300; i++)
+            {
+                for(int j = 100; j <500; j++ )
+                {
+                    System.out.printf("%5d ", pixelData[i][j].getPixelValue());
+                }
+                System.out.println();
+            }
 
             for (int i = 0; i < count; i++) {
                 //write to new  image
@@ -301,6 +330,36 @@ class Reader {
             return false;
         }
     }
+   /* private static void fixPixel(int i, int k,Pixel[][] pixelData)
+    {
+
+
+
+        int c1=i;
+        if(pixelData[p.getY()+1][p.getX()].getPixelValue()!=0) {
+            while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0) {
+                p1 = new Point(c1--, j);
+            }
+            pixelData[p.getY()][p.getX()].setPixelValue(-10);
+            pixelData[p1.getY()][p1.getX()].setPixelValue(-10);
+            p = p.midpoint(p1);
+
+                pixelData[p.getY()][p.getX()].setPixelValue(-1);
+                float t = p.getSlope(medians[1][0], medians[1][1]);
+                if(p.getX()==109)
+                {
+                    System.out.println(t);
+                }
+                zerosM1.add(p);
+
+                t = p.getSlope(medians[1][0], medians[1][1]);
+
+
+                zerosM2.add(p);
+            }
+
+
+    }*/
 
 
 
