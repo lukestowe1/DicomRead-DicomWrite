@@ -66,6 +66,11 @@ public class Point {
 
     }
 
+    public int getPerpY(int x1){
+        double x = x1-this.x;
+        return (int)(this.y+(x*this.perpSlope));
+    }
+
 
 
 }
