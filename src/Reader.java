@@ -152,7 +152,10 @@ class Reader {
                                 p1 = new Point(c1--, j);
                             }
 
+
                             p = p.midpoint(p1);
+
+
 
                             float t = p.getSlope(medians[1][0], medians[1][1]);
                             if(p.getX()==109)
@@ -244,13 +247,19 @@ class Reader {
             {
                 pixelData[p3.getY()][p3.getX()].setPixelValue(700000);
             }*/
-            for(int i = 0; i< 300; i++)
+            /*for(int i = 0; i< 300; i++)
             {
                 for(int j = 100; j <500; j++ )
                 {
                     System.out.printf("%5d ", pixelData[i][j].getPixelValue());
                 }
                 System.out.println();
+            }*/
+            for(int i = 230; i < 250;i++ )
+            {
+                System.out.println(pixelData[i][270].getPixelValue());
+
+
             }
             System.out.println(zerosM2.size());
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
@@ -270,19 +279,17 @@ class Reader {
                         pix2 = new Point(i, k);
                         if (pix.equationLine(pix2, pix.returnSlope())) {
 
-                            if (pixelData[i][k].getPixelValue() >= 700 && pixelData[i][k].getPixelValue() <= 860)//tissue fix
+                            if (pixelData[i][k].getPixelValue() >= 500 && pixelData[i][k].getPixelValue() <= 960)//tissue fix
                             {
-                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+300);
+                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+235);
 
-                            } else if (pixelData[i][k].getPixelValue() >= 870 && pixelData[i][k].getPixelValue() <= 960)//bone fix need to check 900 value
-                            {
-                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+100);
                             }
+
                         }
                     }
                 }
             }
-            System.out.println(bytes[300]+"  "+bytes[300+1]);
+            System.out.println(medians[1][0]+" "+ medians[1][1]);
 
 
 
