@@ -61,10 +61,9 @@ public class Point {
         double y = this.y-p.y;
         float m =(float)(y/x)+0f;
         //System.out.println(m+" "+this.slope);
-        if(m>=this.slope-0.05f && m <= this.slope+0.05f)
-            return true;
-        else
-            return false;
+
+            return m == this.slope;
+
     }
 
 

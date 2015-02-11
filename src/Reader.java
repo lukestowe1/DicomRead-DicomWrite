@@ -157,15 +157,13 @@ class Reader {
 
 
 
-                            float t = p.getSlope(medians[1][0], medians[1][1]);
-                            if(p.getX()==109)
-                            {
-                                System.out.println(t);
-                            }
+                            float t = p.getSlope(medians[1][0], medians[1][1]);//left
+                            //pixelData[p.getY()][p.getX()].setPixelValue(-1);
+
 
                             zerosM1.add(p);
 
-                            t = p.getSlope(medians[1][0], medians[1][1]);
+                            t = p.getSlope(medians[0][0], medians[0][1]);//right
 
 
                             zerosM2.add(p);
@@ -177,7 +175,8 @@ class Reader {
             }
 
 
-           Collections.sort(zerosM1, new Comparator<Point>() {
+
+           /*Collections.sort(zerosM1, new Comparator<Point>() {
                 @Override
                 public int compare(Point  p1, Point  p2)
                 {
@@ -196,18 +195,25 @@ class Reader {
                     else
                         return -1;
                 }
-            });
+            });*/
 
             //left metal
             System.out.println(zerosM1.size());
             Point metal1 = new Point(medians[1][0],medians[1][1]);
+            System.out.println(metal1.getY()+" "+metal1.getX());
+
             for(int i =0;i<zerosM1.size();i++)
             {
 
                 Point p1 = zerosM1.get(i);
                 Point mid = p1.midpoint(metal1);
+                //pixelData[p1.getY()][p1.getX()].setPixelValue(-10);
                 if(checkRange(pixelData[mid.getY()][mid.getX()])==false){
                     zerosM1.remove(p1);
+                }
+                else
+                {
+                    //pixelData[p1.getY()][p1.getX()].setPixelValue(0);
                 }
             }
             System.out.println("new size: "+zerosM1.size());
@@ -216,17 +222,16 @@ class Reader {
             Point metal2 = new Point(medians[0][0],medians[0][1]);
             for(int i =0;i<zerosM2.size();i++)
             {
-                int checker=0;
+
                 Point p1 = zerosM2.get(i);
                 Point mid = p1.midpoint(metal2);
-                while(checkRange(pixelData[mid.getY()][mid.getX()])==true && checker !=6)
-                {
-                    mid = mid.midpoint(metal2);
-                    checker++;
 
-                }
-                if(checker != 6 ){
+                if(checkRange(pixelData[mid.getY()][mid.getX()])==false){
                     zerosM2.remove(p1);
+                }
+                else
+                {
+                    pixelData[p1.getY()][p1.getX()].setPixelValue(2000);
                 }
             }
 
@@ -241,14 +246,14 @@ class Reader {
             {
                 pixelData[p3.getY()][p3.getX()].setPixelValue(700000);
             }*/
-            /*for(int i = 0; i< 300; i++)
+            for(int i = 0; i< 300; i++)
             {
-                for(int j = 100; j <500; j++ )
+                for(int j = 0; j <pSize; j++ )
                 {
                     System.out.printf("%5d ", pixelData[i][j].getPixelValue());
                 }
                 System.out.println();
-            }*/
+            }
 
             System.out.println(zerosM2.size());
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
@@ -262,7 +267,7 @@ class Reader {
             //Point pix = new Point(180,88);
             //pix.getSlope(medians[1][0],medians[1][1]);
             Point pix2 = new Point(0,0);
-            for(Point pix: zerosM1) {
+            for(Point pix: zerosM2) {
                 for (int i = 0; i < pSize; i++) {
                     for (int k = 0; k < pSize; k++) {
                         pix2 = new Point(i, k);
@@ -270,7 +275,7 @@ class Reader {
 
                             if (pixelData[i][k].getPixelValue() >= 500 && pixelData[i][k].getPixelValue() <= 960)//tissue fix
                             {
-                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+235);
+                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+600);
 
                             }
 
