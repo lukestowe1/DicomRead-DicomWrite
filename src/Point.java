@@ -5,6 +5,7 @@ public class Point {
     private int y;
     private int x;
     private float slope;
+    private float perpSlope;
     Point(int x1, int x2)
     {
         y=x1;
@@ -23,7 +24,8 @@ public class Point {
         return slope;
     }
     float returnPerpendicular(){
-        return 0-(1/slope);
+        perpSlope = 0-(1/slope);
+        return perpSlope;
     }
     float getSlope(int y1, int x1){
         double x = x1 - this.x;

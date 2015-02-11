@@ -162,6 +162,7 @@ class Reader {
                             {
                                 System.out.println(t);
                             }
+
                             zerosM1.add(p);
 
                             t = p.getSlope(medians[1][0], medians[1][1]);
@@ -174,6 +175,7 @@ class Reader {
 
                 }
             }
+
 
            Collections.sort(zerosM1, new Comparator<Point>() {
                 @Override
@@ -201,18 +203,10 @@ class Reader {
             Point metal1 = new Point(medians[1][0],medians[1][1]);
             for(int i =0;i<zerosM1.size();i++)
             {
-                int checker=0;
+
                 Point p1 = zerosM1.get(i);
                 Point mid = p1.midpoint(metal1);
-
-
-                while(checkRange(pixelData[mid.getY()][mid.getX()])==true && checker !=6)
-                {
-                    mid = mid.midpoint(metal1);
-                    checker++;
-
-                }
-                if(checker !=6){
+                if(checkRange(pixelData[mid.getY()][mid.getX()])==false){
                     zerosM1.remove(p1);
                 }
             }
@@ -255,12 +249,7 @@ class Reader {
                 }
                 System.out.println();
             }*/
-            for(int i = 230; i < 250;i++ )
-            {
-                System.out.println(pixelData[i][270].getPixelValue());
 
-
-            }
             System.out.println(zerosM2.size());
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
             float t = getSlope(medians[1][0],medians[1][1],240,99);
@@ -290,6 +279,30 @@ class Reader {
                 }
             }
             System.out.println(medians[1][0]+" "+ medians[1][1]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
