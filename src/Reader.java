@@ -137,9 +137,9 @@ class Reader {
             List<Point> zerosM1 = new LinkedList<Point>();
             List<Point> zerosM2 = new ArrayList<Point>();
             Point p = new Point(0,0);
-            for(int i = 0 ;i < 390;i++)
+            for(int i = 1 ;i < 390;i++)
             {
-                for(int j = 0; j<pSize;j++)
+                for(int j = 1; j<pSize;j++)
                 {
                     p=new Point(i,j);
                     if(pixelData[i][j].getPixelValue()==0)
@@ -148,7 +148,7 @@ class Reader {
                         Point p1 = new Point(i,j);
                         int c1=i;
                         if(pixelData[p.getY()+1][p.getX()].getPixelValue()!=0) {
-                            while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0) {
+                            while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0 && c1 > 0) {//avoid running off image outofbounds fix
                                 p1 = new Point(c1--, j);
                             }
 
@@ -200,7 +200,7 @@ class Reader {
             //left metal
             System.out.println(zerosM1.size());
             Point metal1 = new Point(medians[1][0],medians[1][1]);
-            System.out.println(metal1.getY()+" "+metal1.getX());
+            System.out.println("First metal point y :"+metal1.getY()+" x: "+metal1.getX());
 
             for(int i =0;i<zerosM1.size();i++)
             {
@@ -213,13 +213,15 @@ class Reader {
                 }
                 else
                 {
-                    //pixelData[p1.getY()][p1.getX()].setPixelValue(0);
+                    //pixelData[p1.getY()][p1.getX()].setPixelValue(4000);
                 }
             }
             System.out.println("new size: "+zerosM1.size());
 
             System.out.println(zerosM2.size());
             Point metal2 = new Point(medians[0][0],medians[0][1]);
+            System.out.println("Second metal point y :"+metal2.getY()+" x: "+metal2.getX());
+
             for(int i =0;i<zerosM2.size();i++)
             {
 
@@ -231,12 +233,12 @@ class Reader {
                 }
                 else
                 {
-                    pixelData[p1.getY()][p1.getX()].setPixelValue(2000);
+                    //pixelData[p1.getY()][p1.getX()].setPixelValue(4000);
                 }
             }
 
 
-            //testing stuff
+            //testinstuffg
             /*
             for(Point p3:zerosM1)
             {
@@ -246,14 +248,25 @@ class Reader {
             {
                 pixelData[p3.getY()][p3.getX()].setPixelValue(700000);
             }*/
-            for(int i = 0; i< 300; i++)
+           /*for(int i = 0; i< 300; i++)
             {
                 for(int j = 0; j <pSize; j++ )
                 {
                     System.out.printf("%5d ", pixelData[i][j].getPixelValue());
                 }
                 System.out.println();
-            }
+            }*/
+
+            Collections.sort(zerosM2, new Comparator<Point>() {
+                @Override
+                public int compare(Point  p1, Point  p2)
+                {
+                    if(p1.returnSlope()>p2.returnSlope())
+                        return 1;
+                    else
+                        return -1;
+                }
+            });
 
             System.out.println(zerosM2.size());
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
@@ -263,27 +276,87 @@ class Reader {
 
 
             //Queue<Point> streak =  flood(pixelData,p);
-            queuePrint(zerosM1);//prink streak coordinates
+            List<Point> middleEdge = new LinkedList<Point>();
+            queuePrint(zerosM2);//prink streak coordinates
             //Point pix = new Point(180,88);
             //pix.getSlope(medians[1][0],medians[1][1]);
             Point pix2 = new Point(0,0);
-            for(Point pix: zerosM2) {
+            for(Point pix: zerosM1) {
                 for (int i = 0; i < pSize; i++) {
                     for (int k = 0; k < pSize; k++) {
                         pix2 = new Point(i, k);
+
                         if (pix.equationLine(pix2, pix.returnSlope())) {
 
-                            if (pixelData[i][k].getPixelValue() >= 500 && pixelData[i][k].getPixelValue() <= 960)//tissue fix
+                            if (pixelData[i][k].getPixelValue() >= 500 && pixelData[i][k].getPixelValue() <= 960 && pix.returnSlope()>-1.5&& pix.returnSlope()<1.5 )//tissue fix
                             {
-                                pixelData[i][k].setPixelValue(pixelData[i][k].getPixelValue()+600);
+                                int moverC=i;
+                                Point mover = new Point(i,k);
+                                mover.getSlope(pix.getY(),pix.getX());
+                                mover.returnPerpendicular();
+                                while(pixelData[mover.getY()][mover.getX()].getPixelValue() >= 500 && pixelData[mover.getY()][mover.getX()].getPixelValue() <= 990)
+                                {
+                                    moverC--;
+                                    float sl = mover.returnSlope();
+                                    //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                    if(sl>-0.05&& sl<0.005)
+                                    {
+                                        mover=new Point(moverC,mover.getX());
+                                    }
+                                    else
+                                    {
+                                        int x = mover.getPerpY(moverC);
+                                        if(x>519)
+                                        {
+                                            x=519;
+                                        }
+                                        mover=new Point(moverC,x);
+                                    }
 
+
+                                    //System.out.println(mover.getY()+"---------"+mover.getX());
+                                }
+                                Point upper = new Point(mover.getY(),mover.getX());
+                                moverC++;
+                                mover=new Point(i,k);
+                                while(pixelData[mover.getY()][mover.getX()].getPixelValue() >= 500 && pixelData[mover.getY()][mover.getX()].getPixelValue() <= 990)
+                                {
+                                    moverC++;
+                                    //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                    float sl = mover.returnSlope();
+                                    //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                    if(sl>-0.05&& sl<0.005)
+                                    {
+                                        mover=new Point(moverC,mover.getX());
+                                    }
+                                    else
+                                    {
+                                        int x = mover.getPerpY(moverC);
+                                        if(x>519)
+                                        {
+                                            x=519;
+                                        }
+                                        mover=new Point(moverC,x);
+                                    }
+                                }
+                                Point lower = new Point(mover.getY(),mover.getX());
+                                Point mid = lower.midpoint(upper);
+
+
+
+
+                                middleEdge.add(mid);
                             }
+
 
                         }
                     }
                 }
             }
-            System.out.println(medians[1][0]+" "+ medians[1][1]);
+        for(Point p4 : middleEdge)
+        {
+            pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
+        }
 
 
 
@@ -292,6 +365,32 @@ class Reader {
 
 
 
+        /*
+            foreach(all slopes)
+            {
+                pixeldatap[][]
+                for
+                    for
+                        check pixeldata is on perp slope
+                        if check distance form point
+                        check if value is normal
+                        profile
+                        store
+                        average
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+         */
 
 
 
@@ -346,8 +445,8 @@ class Reader {
     private static void queuePrint(List<Point> streak){
         System.out.println("Here");
         for(Point s : streak){
-            if(s.returnSlope()<=1.5 && s.returnSlope()>=1.4)
-            System.out.println(s.returnSlope()+ "x : " +s.getX()+" y : "+s.getY());
+
+            System.out.println(s.returnSlope()+" y: "+s.getY()+" x: "+s.getX());
         }
     }
     private static boolean checkRange(Pixel p) {

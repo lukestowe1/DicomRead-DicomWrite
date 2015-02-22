@@ -24,7 +24,8 @@ public class Point {
         return slope;
     }
     float returnPerpendicular(){
-        perpSlope = 0-(1/slope);
+        float f = 1;
+        perpSlope = 0-(f/slope);
         return perpSlope;
     }
     float getSlope(int y1, int x1){
@@ -60,15 +61,18 @@ public class Point {
         double x = this.x-p.x;
         double y = this.y-p.y;
         float m =(float)(y/x)+0f;
-        //System.out.println(m+" "+this.slope);
 
-            return m == this.slope;
+        //System.out.println(m+" "+this.slope);
+        if(m<=this.slope+0.05f && m >= this.slope-0.05f)
+            return true;
+        else
+            return false;
 
     }
 
-    public int getPerpY(int x1){
-        double x = x1-this.x;
-        return (int)(this.y+(x*this.perpSlope));
+    public int getPerpY(int y1){
+        double y = y1-this.y;
+        return (int)(this.x+(y/this.perpSlope));
     }
 
 
