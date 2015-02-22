@@ -341,6 +341,7 @@ class Reader {
                                 }
                                 Point lower = new Point(mover.getY(),mover.getX());
                                 Point mid = lower.midpoint(upper);
+                                mid.getSlope(medians[1][0],medians[1][1]);
 
 
 
@@ -353,10 +354,21 @@ class Reader {
                     }
                 }
             }
-        for(Point p4 : middleEdge)
-        {
-            pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
-        }
+            List<Point> independentSlopes = new LinkedList<Point>();
+            for(Point p4 : middleEdge)
+            {
+                pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
+                if(!independentSlopes.contains(p4))
+                {
+                    independentSlopes.add(p4);
+                }
+            }
+            System.out.println("Independent slopes : ---------"+independentSlopes.size());
+
+
+
+
+
 
 
 
