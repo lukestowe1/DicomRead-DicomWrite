@@ -6,10 +6,26 @@ public class Point {
     private int x;
     private float slope;
     private float perpSlope;
+    private Point upper;
+    private Point lower;
+
     Point(int x1, int x2)
     {
         y=x1;
         x=x2;
+    }
+    Point returnUpper()
+    {
+        return upper;
+    }
+    Point returnLower()
+    {
+        return lower;
+    }
+    void setLimit(Point upper, Point lower)
+    {
+        this.upper=upper;
+        this.lower=lower;
     }
     int getX()
     {
@@ -55,6 +71,10 @@ public class Point {
     public boolean equals(Object p1){
         Point p = (Point)p1;
         return this.slope == p.slope;
+    }
+    public boolean equalsCoordinate(Point p)
+    {
+        return (this.x==p.x && this.y==p.y);
     }
     public boolean equationLine(Point p, float slope)
     {
