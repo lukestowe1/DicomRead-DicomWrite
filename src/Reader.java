@@ -4,10 +4,13 @@ Author Ashley Deane
  */
 
 
-import java.awt.*;
+
+
+
 import java.io.*;
 import java.util.*;
 import java.util.List;
+
 
 
 class Reader {
@@ -279,7 +282,7 @@ class Reader {
 
             //Queue<Point> streak =  flood(pixelData,p);
             List<Point> middleEdge = new LinkedList<Point>();
-            queuePrint(zerosM2);//prink streak coordinates
+            //queuePrint(zerosM2);//prink streak coordinates
             //Point pix = new Point(180,88);
             //pix.getSlope(medians[1][0],medians[1][1]);
             Point pix2 = new Point(0,0);
@@ -311,6 +314,7 @@ class Reader {
                                                 x = 519;
                                             }
                                             mover = new Point(moverC, x);
+
 
                                         }
 
@@ -351,6 +355,7 @@ class Reader {
 
                 }
             }
+
             List<Point> independentSlopes = new LinkedList<Point>();
             for(Point p4 : middleEdge)
             {
@@ -362,7 +367,7 @@ class Reader {
             }
             System.out.println("Independent slopes : ---------"+independentSlopes.size());
 
-
+/*
 
             Point slice;
             for(Point pix: independentSlopes) {
@@ -381,7 +386,7 @@ class Reader {
                                        //get some profile U shaped with pix being the middle
 
                                    }
-                                   */
+
                                 }
                             }
 
@@ -390,18 +395,7 @@ class Reader {
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 
@@ -445,6 +439,11 @@ class Reader {
                 //write to new  image
                 out.writeByte(bytes[i]);
             }
+
+
+
+
+
 
 
             // close stuff
