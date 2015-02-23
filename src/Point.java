@@ -24,6 +24,14 @@ public class Point {
     {
         return lower;
     }
+    Point returnOutUpper()
+    {
+        return outUpper;
+    }
+    Point returnOutLower()
+    {
+        return outLower;
+    }
     void setLimit(Point upper, Point lower, Point outUpper, Point outLower)
     {
         this.upper=upper;
@@ -46,7 +54,7 @@ public class Point {
     float returnPerpendicular(){
         float f = 1;
         perpSlope = 0-(f/slope);
-        perpSlope = Math.round(perpSlope*100.0f)/100.0f;
+        //perpSlope = Math.round(perpSlope*100.0f)/100.0f;
         return perpSlope;
     }
     float getSlope(int y1, int x1){
@@ -56,14 +64,14 @@ public class Point {
         if( x == 0)
         {
             slope = 500f;
-            slope= Math.round(slope*100.0f)/100.0f;
+            //slope= Math.round(slope*100.0f)/100.0f;
             return slope;
         }
 
         else
         {
             slope=(float)(y/x)+0f;
-            slope = Math.round(slope*100.0f)/100.0f;
+            //slope = Math.round(slope*100.0f)/100.0f;
             return slope;
         }
 
@@ -74,13 +82,15 @@ public class Point {
         int y = (this.y+p1.y)/2;
         return new Point(y,x);
     }
-    @Override
-    public boolean equals(Object p1){
+
+    public boolean equalsSlopes(Object p1){
         Point p = (Point)p1;
         return this.slope == p.slope;
     }
-    public boolean equalsCoordinate(Point p)
+    @Override
+    public boolean equals(Object p1)
     {
+        Point p = (Point)p1;
         return (this.x==p.x && this.y==p.y);
     }
     public boolean equationLine(Point p, float slope)
@@ -90,7 +100,20 @@ public class Point {
         float m =(float)(y/x)+0f;
 
         //System.out.println(m+" "+this.slope);
-        if(m<=this.slope+0.02f && m >= this.slope-0.02f)
+        if(m<=this.slope+0.03f && m >= this.slope-0.03f)
+            return true;
+        else
+            return false;
+
+    }
+    public boolean equationLine2(Point p)
+    {
+        double x = this.x-p.x;
+        double y = this.y-p.y;
+        float m =(float)(y/x)+0f;
+
+        //System.out.println(m+" "+this.slope);
+        if(m==this.slope)
             return true;
         else
             return false;
