@@ -215,7 +215,7 @@ class Reader {
                 }
                 else
                 {
-                    //pixelData[p1.getY()][p1.getX()].setPixelValue(4000);
+                    //pixelData[p1.getY()][p1.getX()].setPixelValue(-1);
                 }
             }
             System.out.println("new size: "+zerosM1.size());
@@ -235,7 +235,7 @@ class Reader {
                 }
                 else
                 {
-                    //pixelData[p1.getY()][p1.getX()].setPixelValue(4000);
+                    //pixelData[p1.getY()][p1.getX()].setPixelValue(-1);
                 }
             }
 
@@ -259,7 +259,7 @@ class Reader {
                 System.out.println();
             }*/
 
-            Collections.sort(zerosM2, new Comparator<Point>() {
+            /*Collections.sort(zerosM2, new Comparator<Point>() {
                 @Override
                 public int compare(Point  p1, Point  p2)
                 {
@@ -268,7 +268,7 @@ class Reader {
                     else
                         return -1;
                 }
-            });
+            });*/
 
             System.out.println(zerosM2.size());
             /*System.out.println("-------"+medians[1][1]+ "------"+medians[1][0]);
@@ -283,6 +283,7 @@ class Reader {
             //Point pix = new Point(180,88);
             //pix.getSlope(medians[1][0],medians[1][1]);
             Point pix2 = new Point(0,0);
+            int count5 = 0;
             for(Point pix: zerosM1) {
                 for (int i = 0; i < pSize; i++) {
 
@@ -293,6 +294,7 @@ class Reader {
 
                             if (pix.equationLine(pix2, pix.returnSlope())) {
 
+                                count5++;
                                 if (pixelData[i][k].getPixelValue() >= 500 && pixelData[i][k].getPixelValue() <= 960 && pix.returnSlope() > -1.5 && pix.returnSlope() < 1.5)//tissue fix
                                 {
                                     int moverC = i;
@@ -322,10 +324,10 @@ class Reader {
                                     mover = new Point(i, k);
                                     while (pixelData[mover.getY()][mover.getX()].getPixelValue() >= 500 && pixelData[mover.getY()][mover.getX()].getPixelValue() <= 990) {
                                         moverC++;
-                                        //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                                    //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
                                         float sl = mover.returnSlope();
-                                        //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
-                                        if (sl > -0.05 && sl < 0.005) {
+                                                    //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                        if (sl > -0.05 && sl < 0.05) {
                                             mover = new Point(moverC, mover.getX());
                                         } else {
                                             int x = mover.getPerpY(moverC);
@@ -340,9 +342,10 @@ class Reader {
                                     Point lower = new Point(mover.getY(), mover.getX());
                                     Point mid = lower.midpoint(upper);
                                     mid.getSlope(medians[1][0], medians[1][1]);
+                                    mid.setLimit(upper,lower,null,null);
 
-
-                                    middleEdge.add(mid);
+                                    if(upper.distance(lower) > 4)
+                                        middleEdge.add(mid);
                                 }
 
 
@@ -351,20 +354,38 @@ class Reader {
 
                 }
             }
-            List<Point> independentSlopes = new LinkedList<Point>();
+            List<Point> independentSlopes = new ArrayList<Point>();
+            System.out.println("Size--------------" + middleEdge.size());
             for(Point p4 : middleEdge)
             {
-                pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
+                //pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
                 if(!independentSlopes.contains(p4))
                 {
+                    pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
                     independentSlopes.add(p4);
                 }
             }
-            System.out.println("Independent slopes : ---------"+independentSlopes.size());
+            System.out.println(count5+"Independent slopes : ---------"+independentSlopes.size());
 
 
 
             Point slice;
+
+            Collections.sort(independentSlopes, new Comparator<Point>() {
+                @Override
+                public int compare(Point  p1, Point  p2)
+                {
+                    if(p1.returnSlope()>p2.returnSlope())
+                        return 1;
+                    else
+                        return -1;
+                }
+            });
+
+            for(Point pix: independentSlopes) {
+                System.out.println("x:  " + pix.getX() + " Y:   " + pix.getY() + "  Slope:   " + pix.returnSlope());
+
+            }
             for(Point pix: independentSlopes) {
                 for (int i = 0; i < pSize; i++) {
 
@@ -372,16 +393,95 @@ class Reader {
 
                             slice = new Point(i, k);
 
-                            if (pix.equationLine(pix2, pix.returnSlope())) {
+                            if (pix.equationLine(slice, pix.returnSlope())) {
 
-                                if(slice.equalsCoordinate(pix2.returnUpper()))//we are now at light bit of streak maybe one too far
+                                if(slice.equalsCoordinate(pix.returnUpper()))//we are now at light bit of streak maybe one too far
                                 {
+                                    if (pixelData[i][k].getPixelValue() < 1300) {
+                                        Point mover = new Point(i, k);
+                                        int moverC = i;
+                                        while (pixelData[mover.getY()][mover.getX()].getPixelValue() >= 500 && pixelData[mover.getY()][mover.getX()].getPixelValue() <= 990) {
+                                            moverC--;
+                                            //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                            float sl = mover.returnSlope();
+                                            //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                            if (sl > -0.05 && sl < 0.05) {
+                                                mover = new Point(moverC, mover.getX());
+                                            } else {
+                                                int x = mover.getPerpY(moverC);
+                                                if (x > 519) {
+                                                    x = 519;
+                                                }
+                                                mover = new Point(moverC, x);
+                                            }
+                                        }
+
+
+                                        float s1 = pix.returnSlope();
+                                        int x;
+                                        if(s1 > -0.05 && s1 < 0.05){
+                                            x = mover.getX();
+                                        }
+                                        else {
+                                            x = mover.getPerpY(mover.getY() + 10);
+                                            if (x > 519) {
+                                                x = 519;
+                                            }
+                                        }
+                                        Point outUpper;
+                                        if(mover.getY()+10 > 519) {
+                                            outUpper = new Point(519, x);
+                                        }
+                                        else{
+                                            outUpper = new Point(mover.getY()+10,x);
+                                        }
+                                        Point upper = new Point(mover.getY(), mover.getX());
+                                        moverC++;
+                                        mover = new Point(i, k);
+                                        while (pixelData[mover.getY()][mover.getX()].getPixelValue() >= 500 && pixelData[mover.getY()][mover.getX()].getPixelValue() <= 990) {
+                                            moverC++;
+                                            //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                            float sl = mover.returnSlope();
+                                            //System.out.println(mover.getY()+"---------"+mover.getX()+"----------"+mover.returnSlope()+"-------"+mover.returnPerpendicular());
+                                            if (sl > -0.05 && sl < 0.05) {
+                                                mover = new Point(moverC, mover.getX());
+                                            } else {
+                                                x = mover.getPerpY(moverC);
+                                                if (x > 519) {
+                                                    x = 519;
+                                                }
+                                                mover = new Point(moverC, x);
+                                            }
+                                        }
+                                        s1 = pix.returnSlope();
+                                        if(s1 > -0.05 && s1 < 0.05){
+                                            x = mover.getX();
+                                        }
+                                        else {
+                                            x = mover.getPerpY(mover.getY() - 10);
+                                            if (x > 519) {
+                                                x = 519;
+                                            }
+                                        }
+                                        Point outLower;
+                                        if(mover.getY()-10 < 0) {
+                                            outLower = new Point(1, x);
+                                        }
+                                        else{
+                                            outLower = new Point(mover.getY()-10, x);
+                                        }
+                                        Point lower = new Point(mover.getY(), mover.getX());
+
+
+                                        slice.setLimit(upper, lower, outUpper, outLower);
+                                    }
+
                                    /*while(count<distance)distance between upper and lower or check not equal to lower or one before lower not sure
                                    {
                                        //get some profile U shaped with pix being the middle
 
-                                   }
-                                   */
+                                   }*/
+
                                 }
                             }
 
