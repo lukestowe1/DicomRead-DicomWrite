@@ -4,7 +4,7 @@ Author Ashley Deane
  */
 
 
-import java.awt.*;
+//import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -21,9 +21,9 @@ class Reader {
         Byte[] endOfhead2 = {(byte) 0xe0, (byte) 0x7f, (byte) 0x10, (byte) 0x00, (byte) 0x4f,
                 (byte) 0x57, (byte) 0x00, (byte) 0x00, (byte) 0x80, (byte) 0x40, (byte) 0x08, (byte) 0x00};//End of head array for 520.dcm file
 
-        int pSize = 520;//size of pixel array either 512/520 will get set further down
-        int positionToWrite = 0;//position in bytes to start writing all the new pixels out to
-        int pixelStart = 0;//start position of pixels in terms of bytes
+        int pSize;//size of pixel array either 512/520 will get set further down
+        int positionToWrite;//position in bytes to start writing all the new pixels out to
+        int pixelStart;//start position of pixels in terms of bytes
 
 
         //handle writing back to a file
@@ -581,15 +581,7 @@ class Reader {
     }
     private static boolean checkRange(Pixel p) {
         //soft tissue(760-860)
-        if (p.getPixelValue() >= 760 && p.getPixelValue() <= 900) {
-            return true;
-        } else if (p.getPixelValue() > 4000) {
-            return true;
-        } else if (p.getPixelValue() == 0) {//metal
-            return true;
-        } else {
-            return false;
-        }
+        return (p.getPixelValue() >= 760 && p.getPixelValue() <= 900) || p.getPixelValue() > 4000 || p.getPixelValue() == 0;
     }
    /* private static void fixPixel(int i, int k,Pixel[][] pixelData)
     {
