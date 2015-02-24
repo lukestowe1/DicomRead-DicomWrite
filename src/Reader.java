@@ -49,20 +49,23 @@ class Reader {
             positionToWrite = pixelStart;  //position to write back to
             System.out.println("Pixel values start at : " + pixelStart);
 
+
+            /**
+             * Get Metal Point in image
+             * And convert bytes to pixels
+             */
             int[][] metalHalves = new int[100][2];//store middle values of any metal object detected in the image
             int count2 = 0;
             int arrayCount = 0;
             int flag = 1;
 
-            //int[][] metal = new int[pSize][pSize];
             for (int i = 0; i < pSize; i++) {
-                for (int j = 0; j < pSize * 2; j += 2) { //increment by two so dont merge wrong bytes
+                for (int j = 0; j < pSize * 2; j += 2) { //increment by two so don't merge wrong bytes
                     Pixel p = new Pixel(bytes[pixelStart + 1], bytes[pixelStart]);//change every byte to Pixel
                     pixelData[i][j / 2] = p;
 
                     pixelStart += 2;
                     if (p.getPixelValue() > 4000) {//detect for metal object
-                        //metal[i][j/2]=1;
                         count2++;
                         flag = 0;
                     } else {
@@ -72,18 +75,13 @@ class Reader {
                             metalHalves[arrayCount][1] = (j / 2) - (count2 / 2);
                             metalHalves[arrayCount][0] = i;
                             arrayCount++;
-
-
                             count2 = 0;
-
                             flag = 1;//reset the flag
                         }
-                        //metal[i][j/2]=0;
-
                     }
                 }
             }
-            //first sort
+            //Sort different metal objects by location
             Arrays.sort(metalHalves, new Comparator<int[]>() {
                 @Override
                 public int compare(final int[] entry1, final int[] entry2) {
@@ -95,11 +93,8 @@ class Reader {
                         return 0;
                     else
                         return -1;
-
                 }
             });
-
-
             //second sort metal
             int[][] finalMetal = new int[4][20];
             finalMetal[0][0] = metalHalves[0][1];
@@ -114,8 +109,8 @@ class Reader {
                     finalMetal[k][0] = metalHalves[j][1];
                     finalMetal[k][1] = metalHalves[j][0];
                 }
-
-            }//get single coordinate for each metal
+            }
+            //get centre Point of each metal object
             int[][] medians = new int[4][2];
             for (int i = 0; i < 4; i++) {
                 int pos = 0;
@@ -124,50 +119,56 @@ class Reader {
                     int x = finalMetal[i][k];
                     pos += x;
                     if (x != 0) {
-
                         countMedian++;
                     }
-
                 }
                 if (countMedian != 0) {
                     medians[i][0] = pos / countMedian;
                     medians[i][1] = finalMetal[i][0];
                 }
-
             }
+            /**
+             * End
+             */
+
+            //Printing centre points of Metal objects
             System.out.println(" "+medians[1][1]+" "+medians[1][0]);
+
+
+            /**
+             * Getting Zeros, with slopes to points
+             * This will lead to finding the streaks
+             * As Zeros are air effected by the streak
+             */
+            //Zeros with slope from first metal Object
             List<Point> zerosM1 = new LinkedList<Point>();
+
+            //Zeros with slope from Second metal Object
             List<Point> zerosM2 = new ArrayList<Point>();
-            Point p = new Point(0,0);
+
+            Point p;
+            //Adding all Zeros to both arrays
             for(int i = 1 ;i < 390;i++)
             {
                 for(int j = 1; j<pSize;j++)
                 {
-                    p=new Point(i,j);
+                    p = new Point(i,j);
                     if(pixelData[i][j].getPixelValue()==0)
                     {
-
                         Point p1 = new Point(i,j);
                         int c1=i;
                         if(pixelData[p.getY()+1][p.getX()].getPixelValue()!=0) {
-                            while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0 && c1 > 0) {//avoid running off image outofbounds fix
+                            while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0 && c1 > 0) {//avoid running off image out of bounds fix
                                 p1 = new Point(c1--, j);
                             }
-
-
                             p = p.midpoint(p1);
 
-
-
-                            float t = p.getSlope(medians[1][0], medians[1][1]);//left
+                            p.getSlope(medians[1][0], medians[1][1]);//left
+                            //Debugging
                             //pixelData[p.getY()][p.getX()].setPixelValue(-1);
-
-
                             zerosM1.add(p);
 
-                            t = p.getSlope(medians[0][0], medians[0][1]);//right
-
-
+                            p.getSlope(medians[0][0], medians[0][1]);//right
                             zerosM2.add(p);
                         }
 
@@ -176,9 +177,7 @@ class Reader {
                 }
             }
 
-
-
-           /*Collections.sort(zerosM1, new Comparator<Point>() {
+            /*Collections.sort(zerosM1, new Comparator<Point>() {
                 @Override
                 public int compare(Point  p1, Point  p2)
                 {
@@ -210,13 +209,13 @@ class Reader {
                 Point p1 = zerosM1.get(i);
                 Point mid = p1.midpoint(metal1);
                 //pixelData[p1.getY()][p1.getX()].setPixelValue(-10);
-                if(checkRange(pixelData[mid.getY()][mid.getX()])==false){
+                if(!checkRange(pixelData[mid.getY()][mid.getX()])){
                     zerosM1.remove(p1);
                 }
-                else
+                /*else
                 {
-                    //pixelData[p1.getY()][p1.getX()].setPixelValue(-1);
-                }
+                    pixelData[p1.getY()][p1.getX()].setPixelValue(-1);
+                }*/
             }
             System.out.println("new size: "+zerosM1.size());
 
@@ -230,17 +229,17 @@ class Reader {
                 Point p1 = zerosM2.get(i);
                 Point mid = p1.midpoint(metal2);
 
-                if(checkRange(pixelData[mid.getY()][mid.getX()])==false){
+                if(!checkRange(pixelData[mid.getY()][mid.getX()])){
                     zerosM2.remove(p1);
                 }
-                else
+                /*else
                 {
-                    //pixelData[p1.getY()][p1.getX()].setPixelValue(-1);
-                }
+                    pixelData[p1.getY()][p1.getX()].setPixelValue(-1);
+                }*/
             }
 
 
-            //testinstuffg
+            //testing stuff
             /*
             for(Point p3:zerosM1)
             {
@@ -282,19 +281,21 @@ class Reader {
             queuePrint(zerosM2);//prink streak coordinates
             //Point pix = new Point(180,88);
             //pix.getSlope(medians[1][0],medians[1][1]);
-            Point pix2 = new Point(0,0);
-            int count5 = 0;
+            Point pix2;
+
+            /**
+             * Streak ID and profiling
+             * ----- To be moved to own method
+             */
             for(Point pix: zerosM1) {
+
                 for (int i = 0; i < pSize; i++) {
 
                     for (int k = 0; k < pSize; k++) {
 
-
                             pix2 = new Point(i, k);
 
                             if (pix.equationLine(pix2, pix.returnSlope())) {
-
-                                count5++;
                                 if (pixelData[i][k].getPixelValue() >= 500 && pixelData[i][k].getPixelValue() <= 960 && pix.returnSlope() > -1.5 && pix.returnSlope() < 1.5)//tissue fix
                                 {
                                     int moverC = i;
@@ -384,16 +385,21 @@ class Reader {
                                     if(upper.distance(lower) > 4 && !middleEdge.contains(mid))
                                         middleEdge.add(mid);
                                 }
-
-
                             }
                         }
-
                 }
             }
+
+            /**
+             * End
+             */
+        /*
             List<Point> independentSlopes = new ArrayList<Point>();
+
+            //Debug Print
             System.out.println("Size--------------" + middleEdge.size());
-            /*for(Point p4 : middleEdge)
+
+            for(Point p4 : middleEdge)
             {
                 //pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
                 if(!independentSlopes.contains(p4))
@@ -401,12 +407,11 @@ class Reader {
                     //pixelData[p4.getY()][p4.getX()].setPixelValue(3000);
                     independentSlopes.add(p4);
                 }
-            }*/
+            }
+
+            //Debug Print
             System.out.println(count5+"Independent slopes : ---------"+independentSlopes.size());
 
-
-
-            Point slice;
 
             Collections.sort(independentSlopes, new Comparator<Point>() {
                 @Override
@@ -419,12 +424,16 @@ class Reader {
                 }
             });
 
+            //Debug Print
             for(Point pix: independentSlopes) {
                 System.out.println("x:  " + pix.getX() + " Y:   " + pix.getY() + "  Slope:   " + pix.returnSlope());
 
             }
+
+            Point slice;
             List<Point> slices = new LinkedList<Point>();
-            /*for(Point pix: independentSlopes) {
+
+            for(Point pix: independentSlopes) {
 
                             slice = new Point(pix.getY(),pix.getX());
 
@@ -513,15 +522,12 @@ class Reader {
                                    /*while(count<distance)distance between upper and lower or check not equal to lower or one before lower not sure
                                    {
                                        //get some profile U shaped with pix being the middle
-
                                    }
-
                                 }
                             }
-
-
-
             */
+
+            //alter Pixels to illustrate streaks
             for(Point p5: middleEdge)
             {
 
@@ -533,42 +539,9 @@ class Reader {
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            /**
+             * Writing back altered image
+             */
             for(int i = 0; i< pSize; i++)
             {
                 for(int j = 0; j <pSize; j++ )
@@ -588,16 +561,15 @@ class Reader {
                 out.writeByte(bytes[i]);
             }
 
-
             // close stuff
             out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
+        /**
+         * end
+         */
     }
-
 
     //print queue
     private static void queuePrint(List<Point> streak){
@@ -621,9 +593,6 @@ class Reader {
     }
    /* private static void fixPixel(int i, int k,Pixel[][] pixelData)
     {
-
-
-
         int c1=i;
         if(pixelData[p.getY()+1][p.getX()].getPixelValue()!=0) {
             while (pixelData[p1.getY() - 1][p1.getX()].getPixelValue() == 0) {
@@ -643,13 +612,7 @@ class Reader {
 
                 t = p.getSlope(medians[1][0], medians[1][1]);
 
-
                 zerosM2.add(p);
             }
-
-
     }*/
-
-
-
 }
