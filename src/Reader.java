@@ -402,6 +402,47 @@ class Reader {
             System.out.println("Streak Average"+midgh/midgh1);*/
 
 
+            double[][] lineProperties = new double[lineOccuranceSize][5];//
+
+            int countFill=1;
+            for(Slice sl : middleEdge) {
+
+                    int flag2 = 0;
+                    for (int i = 0; i < countFill; i++) {
+                        if (lineProperties[i][0] == middleEdge.get(y).returnSlope()) {
+                            if()
+                                lineProperties[i][1] += sl.returnBorderAvg();
+                            if()
+                                lineProperties[i][2] += sl.returnMidPix();
+                            if()
+                                lineProperties[i][3] += sl.returnOutAvg();
+                            if()
+                                lineProperties[i][4]++;
+                            flag2 = 1;
+                            break;
+                        }
+
+
+                    }
+                    if (flag != 1) {
+
+                        lineProperties[countFill - 1][0] = (double) sl.returnSlope();
+                        if (rightvaluye)
+                            lineProperties[countFill - 1][1] = sl.returnBorderAvg();//mught have to split
+                        if ()
+                            lineProperties[countFill - 1][2] = sl.returnMidPix();
+                        if ()
+                            lineProperties[countFill - 1][3] = sl.returnOutAvg();
+                        if ()
+                            lineProperties[countFill - 1][4]++;
+
+                        countFill++;
+                    }
+
+
+
+            }
+
 
 
             /**
