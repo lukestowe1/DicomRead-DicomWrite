@@ -630,6 +630,19 @@ class Reader {
          */
     }
 
+
+    private static int[] profiles(Point p){
+        int [] profiles = new int[20];
+        Point up, low;
+        int upY = p.;
+        up = new Point(p.returnUpper().getY(), p.returnUpper().getY());
+        low = new Point(p.returnLower().getY(), p.returnLower().getY());
+        while ( up != low){
+
+        }
+
+        return profiles;
+    }
     //print queue
     private static void queuePrint(List<Point> streak){
         System.out.println("Here");
