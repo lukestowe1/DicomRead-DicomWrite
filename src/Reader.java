@@ -235,6 +235,7 @@ class Reader {
             List<Slice> middleEdge = new LinkedList<Slice>();
             //queuePrint(zerosM2);//prink streak coordinates
             Point pix2;
+            int lineOccuranceSize=0;
 
             /**
              * Streak ID and profiling
@@ -330,8 +331,17 @@ class Reader {
                                     mid.getSlope(medians[1][0], medians[1][1]);
                                     mid.setLimit(upper,lower,outUpper,outLower);//link mid with its limit points
 
-                                    if(upper.distance(lower) > 4 && !middleEdge.contains(mid))//avoid random dots streak must have width
+                                    if(upper.distance(lower) > 4 && !middleEdge.contains(mid)) {
+
+                                        //avoid random dots streak must have width
+
+                                        if (containsSlope(middleEdge, mid.returnSlope())) {
+                                            lineOccuranceSize++;
+                                        }
+
+
                                         middleEdge.add(mid);
+                                    }
                                 }
                             }
                         }
@@ -341,9 +351,9 @@ class Reader {
             /**
              * End
              */
-
+                System.out.println("------- line size"+ lineOccuranceSize + "----originals : "+middleEdge.size());
             //alter Pixels to illustrate streaks
-            int gh=0;
+            /*int gh=0;
             int gh1=0;
 
             int midgh=0;
@@ -356,7 +366,7 @@ class Reader {
 
                     if( pixelData[p5.getUpY()][p5.getUpX()].getPixelValue()>1100 &&pixelData[p5.getUpY()][p5.getUpX()].getPixelValue()<1300)
                     {
-                        gh+=pixelData[p5.getUpY()][p5.getUpX()].getPixelValue();
+                        gh+=pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].getPixelValue();
                         gh1++;
                     }
                     gh=0;
@@ -389,7 +399,10 @@ class Reader {
                 }
 
             }
-            System.out.println("Streak Average"+midgh/midgh1);
+            System.out.println("Streak Average"+midgh/midgh1);*/
+
+
+
 
             /**
              * Writing back altered image
@@ -437,6 +450,16 @@ class Reader {
         return profiles;
     }
     //print queue
+
+    private static boolean containsSlope(List<Slice> t , float fl)
+    {
+        for(Slice t1: t)
+        {
+            if(t1.returnSlope()==fl)
+                return false;
+        }
+        return true;
+    }
     private static void queuePrint(List<Point> streak){
         System.out.println("Here");
         for(Point s : streak){

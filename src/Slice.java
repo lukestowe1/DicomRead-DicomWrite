@@ -59,12 +59,5 @@ public class Slice extends Point {
         this.outLower=outLower;
         this.outUpper=outUpper;
     }
-    @Override
-    public boolean equals(Object p1)
-    {
-        Slice p = (Slice)p1;
-        return (this.returnSlope() == p.returnSlope());
-    }
-
 
 }
