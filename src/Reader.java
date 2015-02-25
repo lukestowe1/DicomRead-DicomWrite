@@ -199,9 +199,9 @@ class Reader {
             });*/
 
             //left metal
-            System.out.println(zerosM1.size());
+            //System.out.println(zerosM1.size());
             Point metal1 = new Point(medians[1][0],medians[1][1]);
-            System.out.println("First metal point y :"+metal1.getY()+" x: "+metal1.getX());
+            //System.out.println("First metal point y :"+metal1.getY()+" x: "+metal1.getX());
 
             for(int i =0;i<zerosM1.size();i++)
             {
@@ -217,11 +217,11 @@ class Reader {
                     pixelData[p1.getY()][p1.getX()].setPixelValue(-1);
                 }*/
             }
-            System.out.println("new size: "+zerosM1.size());
+            //System.out.println("new size: "+zerosM1.size());
 
-            System.out.println(zerosM2.size());
+            //System.out.println(zerosM2.size());
             Point metal2 = new Point(medians[0][0],medians[0][1]);
-            System.out.println("Second metal point y :"+metal2.getY()+" x: "+metal2.getX());
+            //System.out.println("Second metal point y :"+metal2.getY()+" x: "+metal2.getX());
 
             for(int i =0;i<zerosM2.size();i++)
             {
@@ -278,7 +278,7 @@ class Reader {
 
             //Queue<Point> streak =  flood(pixelData,p);
             List<Point> middleEdge = new LinkedList<Point>();
-            queuePrint(zerosM2);//prink streak coordinates
+            //queuePrint(zerosM2);//prink streak coordinates
             //Point pix = new Point(180,88);
             //pix.getSlope(medians[1][0],medians[1][1]);
             Point pix2;
@@ -328,7 +328,7 @@ class Reader {
                                     else {
                                         x = mover.getPerpY(mover.getY() - 10);
                                         if (x < 1) {
-                                            System.out.println("X:------" + mover.getX() + " Y--------- " + mover.getY() + "Slope:-----" + mover.returnSlope());
+                                            //System.out.println("X:------" + mover.getX() + " Y--------- " + mover.getY() + "Slope:-----" + mover.returnSlope());
                                             x = 1;
                                         }
                                     }
@@ -528,15 +528,74 @@ class Reader {
             */
 
             //alter Pixels to illustrate streaks
+            int gh=0;
+            int gh1=0;
+
+            int midgh=0;
+            int midgh1=0;
             for(Point p5: middleEdge)
             {
 
-                pixelData[p5.getY()][p5.getX()].setPixelValue(3000);
+                if(p5.returnSlope()>-0.03 && p5.returnSlope()<0.03)
+                {
+                    //pixelData[p5.getY()][p5.getX()].setPixelValue(3000);
+                    //pixelData[p5.returnLower().getY()][p5.returnLower().getX()].setPixelValue(3000);
+
+
+                    if( pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].getPixelValue()>1100 &&pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].getPixelValue()<1300)
+                    {
+                        gh+=pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].getPixelValue();
+                        gh1++;
+                    }
+                    gh=0;
+                    gh1=0;
+
+                    if(pixelData[p5.getY()][p5.getX()].getPixelValue()>0 &&pixelData[p5.getY()][p5.getX()].getPixelValue()<1300)
+                    {
+                        midgh+=pixelData[p5.getY()][p5.getX()].getPixelValue();
+                        midgh1++;
+                    }
+
+
+
+                }
+                /*pixelData[p5.getY()][p5.getX()].setPixelValue(3000);
                 pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].setPixelValue(3000);
                 pixelData[p5.returnLower().getY()][p5.returnLower().getX()].setPixelValue(3000);
                 pixelData[p5.returnOutLower().getY()][p5.returnOutLower().getX()].setPixelValue(3000);
                 pixelData[p5.returnOutUpper().getY()][p5.returnOutUpper().getX()].setPixelValue(3000);
+                */
             }
+
+            for(Point p5: middleEdge)
+            {
+
+                if(p5.returnSlope()>-0.03 && p5.returnSlope()<0.03)
+                {
+                    //pixelData[p5.getY()][p5.getX()].setPixelValue(3000);
+                    //pixelData[p5.returnLower().getY()][p5.returnLower().getX()].setPixelValue(3000);
+
+
+
+
+                    if(pixelData[p5.getY()][p5.getX()].getPixelValue()>0 &&pixelData[p5.getY()][p5.getX()].getPixelValue()<1300)
+                    {
+                        pixelData[p5.getY()][p5.getX()].setPixelValue(pixelData[p5.getY()][p5.getX()].getPixelValue()+(1048-(midgh/midgh1)));
+                    }
+
+
+
+                }
+                /*pixelData[p5.getY()][p5.getX()].setPixelValue(3000);
+                pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].setPixelValue(3000);
+                pixelData[p5.returnLower().getY()][p5.returnLower().getX()].setPixelValue(3000);
+                pixelData[p5.returnOutLower().getY()][p5.returnOutLower().getX()].setPixelValue(3000);
+                pixelData[p5.returnOutUpper().getY()][p5.returnOutUpper().getX()].setPixelValue(3000);
+                */
+            }
+            System.out.println("Streak Average"+midgh/midgh1);
+
+
 
 
             /**
