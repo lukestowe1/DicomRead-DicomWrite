@@ -6,38 +6,10 @@ public class Point {
     private int x;
     private float slope;
     private float perpSlope;
-    private Point upper;
-    private Point outUpper;
-    private Point lower;
-    private Point outLower;
 
-    Point(int x1, int x2)
-    {
-        y=x1;
-        x=x2;
-    }
-    Point returnUpper()
-    {
-        return upper;
-    }
-    Point returnLower()
-    {
-        return lower;
-    }
-    Point returnOutUpper()
-    {
-        return outUpper;
-    }
-    Point returnOutLower()
-    {
-        return outLower;
-    }
-    void setLimit(Point upper, Point lower, Point outUpper, Point outLower)
-    {
-        this.upper=upper;
-        this.lower=lower;
-        this.outLower=outLower;
-        this.outUpper=outUpper;
+    Point(int y1, int x1) {
+        y = y1;
+        x = x1;
     }
     int getX()
     {
@@ -93,19 +65,17 @@ public class Point {
         Point p = (Point)p1;
         return (this.x==p.x && this.y==p.y);
     }
-    public boolean equationLine(Point p, float slope)
+
+    public boolean equationLine(Point p)
     {
         double x = this.x-p.x;
         double y = this.y-p.y;
         float m =(float)(y/x)+0f;
 
         //System.out.println(m+" "+this.slope);
-        if(m<=this.slope+0.03f && m >= this.slope-0.03f)
-            return true;
-        else
-            return false;
-
+        return m <= this.slope + 0.03f && m >= this.slope - 0.03f;
     }
+
     public boolean equationLine2(Point p)
     {
         double x = this.x-p.x;
@@ -113,10 +83,7 @@ public class Point {
         float m =(float)(y/x)+0f;
 
         //System.out.println(m+" "+this.slope);
-        if(m==this.slope)
-            return true;
-        else
-            return false;
+        return m == this.slope;
 
     }
 

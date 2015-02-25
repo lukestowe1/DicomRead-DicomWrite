@@ -232,7 +232,7 @@ class Reader {
 
 
 
-            List<Point> middleEdge = new LinkedList<Point>();
+            List<Slice> middleEdge = new LinkedList<Slice>();
             //queuePrint(zerosM2);//prink streak coordinates
             Point pix2;
 
@@ -248,7 +248,7 @@ class Reader {
 
                             pix2 = new Point(i, k);
 
-                            if (pix.equationLine(pix2, pix.returnSlope())) {
+                            if (pix.equationLine(pix2)) {
                                 if (pixelData[i][k].getPixelValue() >= 500 && pixelData[i][k].getPixelValue() <= 960 && pix.returnSlope() > -1.5 && pix.returnSlope() < 1.5)//tissue fix
                                 {
                                     int moverC = i;
@@ -308,7 +308,8 @@ class Reader {
 
                                     }
                                     Point lower = new Point(mover.getY(), mover.getX());
-                                    Point mid = lower.midpoint(upper);
+                                    Point temp = lower.midpoint(upper);
+                                    Slice mid = new Slice(temp.getY(),temp.getX());
                                     s1 = mover.returnSlope();
                                     if(s1 > -0.05 && s1 < 0.05){
                                         x = mover.getX();
@@ -347,15 +348,15 @@ class Reader {
 
             int midgh=0;
             int midgh1=0;
-            for(Point p5: middleEdge)
+            for(Slice p5: middleEdge)
             {
 
                 if(p5.returnSlope()>-0.03 && p5.returnSlope()<0.03)
                 {
 
-                    if( pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].getPixelValue()>1100 &&pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].getPixelValue()<1300)
+                    if( pixelData[p5.getUpY()][p5.getUpX()].getPixelValue()>1100 &&pixelData[p5.getUpY()][p5.getUpX()].getPixelValue()<1300)
                     {
-                        gh+=pixelData[p5.returnUpper().getY()][p5.returnUpper().getX()].getPixelValue();
+                        gh+=pixelData[p5.getUpY()][p5.getUpX()].getPixelValue();
                         gh1++;
                     }
                     gh=0;
@@ -390,9 +391,6 @@ class Reader {
             }
             System.out.println("Streak Average"+midgh/midgh1);
 
-
-
-
             /**
              * Writing back altered image
              */
@@ -426,12 +424,12 @@ class Reader {
     }
 
 
-    private static int[] profiles(Point p){
+    private static int[] profiles(Slice p){
         int [] profiles = new int[20];
-        Point up, low;
-        int upY = p.;
-        up = new Point(p.returnUpper().getY(), p.returnUpper().getY());
-        low = new Point(p.returnLower().getY(), p.returnLower().getY());
+        Slice up, low;
+        int upY = p.getUpY();
+        up = new Slice(p.getUpY(), p.getUpX());
+        low = new Slice(p.getLowY(), p.getLowX());
         while ( up != low){
 
         }
