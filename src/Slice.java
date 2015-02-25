@@ -9,6 +9,14 @@ public class Slice extends Point {
     private Point lower;
     private Point outLower;
 
+    private int midPix=0;
+    private int upperPix=0;
+    private int lowerPix=0;
+    private int borderAvg=0;
+    private int outerAvg=0;
+    private int outerUpperPix=0;
+    private int outerLowerPix=0;
+
     Slice(int y1, int x1) {
         super(y1, x1);
     }
@@ -36,6 +44,32 @@ public class Slice extends Point {
     {
         return outUpper;
     }
+    void setAvg(int mid,int upper, int lower , int outerUpper , int outerLower)
+    {
+        midPix=mid;
+        upperPix=upper;
+        lowerPix=lower;
+        borderAvg=(upper+lower)/2;
+        outerUpperPix=outerUpper;
+        outerLowerPix=outerLower;
+        outerAvg=(outerUpper+outerLower)/2;
+    }
+    int returnBorderAvg()
+    {
+        return borderAvg;
+    }
+    int returnMidPix()
+    {
+        return midPix;
+    }
+    int returnOutAvg()
+    {
+        return outerAvg;
+    }
+
+
+
+
     int getOutUpY(){
         return outUpper.getY();
     }

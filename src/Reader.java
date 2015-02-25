@@ -330,7 +330,12 @@ class Reader {
                                     }
                                     mid.getSlope(medians[1][0], medians[1][1]);
                                     mid.setLimit(upper,lower,outUpper,outLower);//link mid with its limit points
-
+                                    int upperPix = pixelData[upper.getX()][upper.getY()].getPixelValue();
+                                    int midPix = pixelData[mid.getX()][mid.getY()].getPixelValue();
+                                    int lowerPix = pixelData[lower.getX()][lower.getY()].getPixelValue();
+                                    int outerLowerPix = pixelData[outLower.getX()][outLower.getY()].getPixelValue();
+                                    int outerUpperPix = pixelData[outUpper.getX()][outUpper.getY()].getPixelValue();
+                                    mid.setAvg(midPix,upperPix,lowerPix,outerUpperPix,outerLowerPix);
                                     if(upper.distance(lower) > 4 && !middleEdge.contains(mid)) {
 
                                         //avoid random dots streak must have width
@@ -409,41 +414,38 @@ class Reader {
 
                     int flag2 = 0;
                     for (int i = 0; i < countFill; i++) {
-                        if (lineProperties[i][0] == middleEdge.get(y).returnSlope()) {
-                            if()
+                        if (lineProperties[i][0] == sl.returnSlope()) {
+                            if(sl.returnBorderAvg()<1300)
                                 lineProperties[i][1] += sl.returnBorderAvg();
-                            if()
+                            if(sl.returnMidPix()<1300)
                                 lineProperties[i][2] += sl.returnMidPix();
-                            if()
+                            if(sl.returnOutAvg()<1300)
                                 lineProperties[i][3] += sl.returnOutAvg();
-                            if()
-                                lineProperties[i][4]++;
+                            lineProperties[i][4]++;
                             flag2 = 1;
                             break;
                         }
 
 
                     }
-                    if (flag != 1) {
+                    if (flag2 != 1) {
 
                         lineProperties[countFill - 1][0] = (double) sl.returnSlope();
-                        if (rightvaluye)
+                        if (sl.returnBorderAvg()<1300)
                             lineProperties[countFill - 1][1] = sl.returnBorderAvg();//mught have to split
-                        if ()
+                        if (sl.returnBorderAvg()<1300)
                             lineProperties[countFill - 1][2] = sl.returnMidPix();
-                        if ()
+                        if (sl.returnBorderAvg()<1300)
                             lineProperties[countFill - 1][3] = sl.returnOutAvg();
-                        if ()
-                            lineProperties[countFill - 1][4]++;
-
+                        lineProperties[countFill - 1][4]++;
                         countFill++;
                     }
-
-
-
             }
 
-
+            for(int i = 0 ; i < lineOccuranceSize;i++)
+            {
+                System.out.println("slope "+lineProperties[i][0]+" number of slices at this slope: "+lineProperties[i][4]);
+            }
 
             /**
              * Writing back altered image
