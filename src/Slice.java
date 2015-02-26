@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 /**
  * Created by Ashley on 25/02/2015.
  */
@@ -8,7 +10,6 @@ public class Slice extends Point {
     private Point outUpper;
     private Point lower;
     private Point outLower;
-
     private int midPix=0;
     private int upperPix=0;
     private int lowerPix=0;
@@ -16,6 +17,7 @@ public class Slice extends Point {
     private int outerAvg=0;
     private int outerUpperPix=0;
     private int outerLowerPix=0;
+    private int borderLesAvg = 0;
 
     Slice(int y1, int x1) {
         super(y1, x1);
@@ -53,7 +55,18 @@ public class Slice extends Point {
         outerUpperPix=outerUpper;
         outerLowerPix=outerLower;
         outerAvg=(outerUpper+outerLower)/2;
+
     }
+
+    float returnSlope1()
+    {
+        BigDecimal bd = new BigDecimal(Float.toString(this.returnSlope()));
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+        //return (float)Math.round(this.returnSlope()*100.0f)/100.0f;
+    }
+
+
     int returnBorderAvg()
     {
         return borderAvg;

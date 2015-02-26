@@ -25,8 +25,14 @@ public class Point {
     }
     float returnPerpendicular(){
         float f = 1;
+
         perpSlope = 0-(f/slope);
         //perpSlope = Math.round(perpSlope*100.0f)/100.0f;
+        if(slope==500)
+        {
+            perpSlope=0;
+        }
+
         return perpSlope;
     }
     float getSlope(int y1, int x1){
