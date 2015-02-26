@@ -19,6 +19,10 @@ public class Slice extends Point {
     private int outerLowerPix=0;
     private int borderLesAvg = 0;
 
+
+    private int outUpperInt=0;
+    private int outLowerInt=0;
+
     Slice(int y1, int x1) {
         super(y1, x1);
     }
@@ -55,6 +59,8 @@ public class Slice extends Point {
         outerUpperPix=outerUpper;
         outerLowerPix=outerLower;
         outerAvg=(outerUpper+outerLower)/2;
+        outUpperInt=outerUpper;
+        outLowerInt=outerLower;
 
     }
 
@@ -77,7 +83,10 @@ public class Slice extends Point {
     }
     int returnOutAvg()
     {
-        return outerAvg;
+        if(Math.abs(outUpperInt-outLowerInt)>340)
+            return 341;
+        else
+            return outerAvg;
     }
 
 

@@ -417,50 +417,49 @@ class Reader {
             System.out.println("count fill"+ countFill);
             for (Slice sl : middleEdge) {
 
-                int counter = 1;
-                for (int i = 0; i < countFill; i++) {
-                    if (lineProperties[i][0] == sl.returnSlope1()) {
-                        Slice temp = sl;
+                    int counter = 1;
+                    for (int i = 0; i < countFill; i++) {
+                        if (lineProperties[i][0] == sl.returnSlope1()) {
+                            Slice temp = sl;
 
-                        if (sl.returnOutAvg() < 1300) {
-
-                            lineProperties[i][counter] += sl.returnOutAvg();
-                            counter++;
-                            lineProperties[i][counter]++;
-                            counter++;
-                        }
-                        else
-                            counter+=2;
-                        while (temp.getY() <= sl.getLowY()) {
-
-                            if(pixelData[temp.getY()][temp.getX()].getPixelValue()<1300 && pixelData[temp.getY()][temp.getX()].getPixelValue()>100)
-                                lineProperties[i][counter] += pixelData[temp.getY()][temp.getX()].getPixelValue();
-
-                            if(temp.returnSlope1()==(float)-0.02)
-                            {
-                                System.out.println(pixelData[temp.getY()][temp.getX()].getPixelValue()+" "+temp.getY()+" "+temp.getX());
+                            if (sl.returnOutAvg() == 341) {
+                                break;
                             }
-                            //System.out.println("Adding " + pixelData[temp.getY()][temp.getX()].getPixelValue()+"temp"+ temp.getY()+" ----" + temp.getX()+" "+sl.returnSlope());
+                            else {
+                                lineProperties[i][counter] += sl.returnOutAvg();
+                                counter++;
+                                lineProperties[i][counter]++;
+                                counter++;
 
-                            lineProperties[i][counter+1]++;
+                                while (temp.getY() <= sl.getLowY()) {
 
-                            float s1 = sl.returnSlope();
-                            if (s1 > -0.05 && s1 < 0.05) {
-                                temp = new Slice(temp.getY() + 1, temp.getX());
-                            } else {
-                                temp.returnPerpendicular();
-                                int x = temp.getPerpY(temp.getY() + 1);//bounds checking
-                                //System.out.println(x+"<---------");
-                                if (x > 519) {
-                                    x = 519;
+                                    if (pixelData[temp.getY()][temp.getX()].getPixelValue() < 1300 && pixelData[temp.getY()][temp.getX()].getPixelValue() > 100)
+                                        lineProperties[i][counter] += pixelData[temp.getY()][temp.getX()].getPixelValue();
+
+
+                                    //System.out.println("Adding " + pixelData[temp.getY()][temp.getX()].getPixelValue()+"temp"+ temp.getY()+" ----" + temp.getX()+" "+sl.returnSlope());
+
+                                    lineProperties[i][counter + 1]++;
+
+                                    float s1 = sl.returnSlope();
+                                    if (s1 > -0.05 && s1 < 0.05) {
+                                        temp = new Slice(temp.getY() + 1, temp.getX());
+                                    } else {
+                                        temp.returnPerpendicular();
+                                        int x = temp.getPerpY(temp.getY() + 1);//bounds checking
+                                        //System.out.println(x+"<---------");
+                                        if (x > 519) {
+                                            x = 519;
+                                        }
+
+                                        temp = new Slice(temp.getY() + 1, x);
+
+                                    }
+                                    counter += 2;
+
                                 }
 
-                                temp = new Slice(temp.getY() + 1, x);
-
                             }
-                            counter+=2;
-
-                        }
                     }
                 }
             }
