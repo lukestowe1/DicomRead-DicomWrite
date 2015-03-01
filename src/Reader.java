@@ -248,8 +248,10 @@ class Reader {
                                 Point mover = new Point(i, k);
                                 mover.getSlope(pix.getY(), pix.getX());
                                 mover.returnPerpendicular();
+
                                 while (pixelData[mover.getY()][mover.getX()].getPixelValue() >= 500 && pixelData[mover.getY()][mover.getX()].getPixelValue() <= 990) {
                                     moverC--;
+
                                     float sl = mover.returnSlope();
                                     if (sl > -0.05 && sl < 0.05) {
                                         mover = new Point(moverC, mover.getX());
@@ -259,29 +261,32 @@ class Reader {
                                             x = 519;
                                         }
                                         mover = new Point(moverC, x);
+
                                     }
 
 
                                 }
+                                //System.out.println("OUT");
                                 float s1 = mover.returnSlope();
                                 int x;
                                 if (s1 > -0.05 && s1 < 0.05) {//means infinity so x will not change
                                     x = mover.getX();
                                 } else {
-                                    x = mover.getPerpY(mover.getY() - 10);
+                                    x = mover.getPerpY(mover.getY() - 20);
                                     if (x < 1) {
                                         x = 1;
                                     }
                                 }
                                 Point outUpper;
-                                if (mover.getY() - 10 < 1) {
+                                if (mover.getY() - 20 < 1) {
                                     outUpper = new Point(1, x);//bounds checking
                                 } else {
-                                    outUpper = new Point(mover.getY() - 10, x);
+                                    outUpper = new Point(mover.getY() - 20, x);
                                 }
                                 Point upper = new Point(mover.getY(), mover.getX());
                                 moverC++;
                                 mover = new Point(i, k);
+
                                 while (pixelData[mover.getY()][mover.getX()].getPixelValue() >= 500 && pixelData[mover.getY()][mover.getX()].getPixelValue() <= 990) {
                                     moverC++;
                                     float sl = mover.returnSlope();
@@ -296,6 +301,7 @@ class Reader {
 
                                     }
 
+
                                 }
                                 Point lower = new Point(mover.getY(), mover.getX());
                                 Point temp = lower.midpoint(upper);
@@ -304,16 +310,16 @@ class Reader {
                                 if (s1 > -0.05 && s1 < 0.05) {
                                     x = mover.getX();
                                 } else {
-                                    x = mover.getPerpY(mover.getY() + 10);
+                                    x = mover.getPerpY(mover.getY() + 20);
                                     if (x > 519) {//bounds
                                         x = 519;
                                     }
                                 }
                                 Point outLower;
-                                if (mover.getY() + 10 > 519) {
+                                if (mover.getY() + 20 > 519) {
                                     outLower = new Point(519, x);//bounds
                                 } else {
-                                    outLower = new Point(mover.getY() + 10, x);
+                                    outLower = new Point(mover.getY() +20, x);
                                 }
                                 mid.getSlope(medians[1][0], medians[1][1]);
 
@@ -327,8 +333,7 @@ class Reader {
                                 if (upper.distance(lower) > 4 && !middleEdge.contains(mid)) {
 
                                     //avoid random dots streak must have width
-                                    if (upper.distance(lower) > max)
-                                        max = upper.distance(lower);
+
                                     if (containsSlope(middleEdge, mid.returnSlope())) {
                                         lineOccuranceSize++;
                                     }
@@ -336,6 +341,73 @@ class Reader {
 
                                     middleEdge.add(mid);
                                 }
+                                moverC=upper.getY();
+                                mover = new Point(upper.getY(), upper.getX());
+                                mover.getSlope(mid.getY(), mid.getX());
+                                mover.returnPerpendicular();
+                                int testC=0;
+
+                                while (testC<5) {
+                                    moverC--;
+
+                                    float sl = mover.returnSlope();
+                                    if (sl > -0.05 && sl < 0.05) {
+                                        mover = new Point(moverC, mover.getX());
+                                    } else {
+                                        x = mover.getPerpY(moverC);//bounds checking
+
+                                        if(x<0)
+                                            x=1;
+                                        if (x > 519) {
+                                            x = 519;
+                                        }
+                                        mover = new Point(moverC, x);
+
+                                    }
+                                   // System.out.println(mover.getX()+" "+mover.getY());
+                                    testC++;
+
+
+                                }
+                                upper=mover;
+                                moverC=lower.getY();
+                                mover = new Point(lower.getY(), lower.getX());
+                                mover.getSlope(mid.getY(), mid.getX());
+                                mover.returnPerpendicular();
+                                testC=0;
+                                while (testC<5) {
+                                    moverC++;
+                                    float sl = mover.returnSlope();
+                                    if (sl > -0.05 && sl < 0.05) {
+                                        mover = new Point(moverC, mover.getX());
+                                    } else {
+                                        x = mover.getPerpY(moverC);
+                                        if (x > 519) {
+                                            x = 519;
+                                        }
+                                        if(x<1)
+                                        {
+                                            x=1;
+                                        }
+                                        mover = new Point(moverC, x);
+
+
+                                    }
+                                    //System.out.println(mover.getX()+" "+mover.getY());
+                                    testC++;
+                                }
+                                lower=mover;
+                                mid.setLimit(upper, lower, outUpper, outLower);//link mid with its limit points
+                                 upperPix = pixelData[upper.getX()][upper.getY()].getPixelValue();
+                                 midPix = pixelData[mid.getY()][mid.getX()].getPixelValue();
+                                 lowerPix = pixelData[lower.getY()][lower.getX()].getPixelValue();
+                                 outerLowerPix = pixelData[outLower.getY()][outLower.getX()].getPixelValue();
+                                 outerUpperPix = pixelData[outUpper.getY()][outUpper.getX()].getPixelValue();
+                                mid.setAvg(midPix, upperPix, lowerPix, outerUpperPix, outerLowerPix);
+
+
+                                if (upper.distance(lower) > max)
+                                    max = upper.distance(lower);
                             }
                         }
                     }
