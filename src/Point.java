@@ -79,7 +79,8 @@ public class Point {
         float m =(float)(y/x)+0f;
 
         //System.out.println(m+" "+this.slope);
-        return m <= this.slope + 0.03f && m >= this.slope - 0.03f;
+        //return m == this.slope;
+        return m <= this.slope + 0.03f && m >= this.slope - 0.03f;//0.03
     }
 
     public boolean equationLine2(Point p)
