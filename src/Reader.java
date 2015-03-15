@@ -5,6 +5,12 @@ Author Ashley Deane
 
 
 //import java.awt.*;
+import com.pixelmed.display.SingleImagePanel;
+import com.pixelmed.display.SourceImage;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -12,8 +18,10 @@ import java.util.List;
 
 class Reader {
     public static void main(String[] argv) throws Exception {
+
+        String inputString =promptForFile();
         //Read from an input stream
-        InputStream is = new BufferedInputStream(new FileInputStream("Phantom_Artifact.dcm"));//input image
+        InputStream is = new BufferedInputStream(new FileInputStream(inputString));//input image
         DataInputStream in = new DataInputStream(is);
         Byte[] bytes = new Byte[600000];//array to store all bytes of file
         Byte[] endOfhead1 = {(byte) 0xe0, (byte) 0x7f, (byte) 0x10, (byte) 0x00, (byte) 0x4f,
@@ -27,7 +35,8 @@ class Reader {
 
 
         //handle writing back to a file
-        BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream("Output.dcm"));
+        String outputString = getOutputFile(inputString);
+        BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputString+"Output.dcm"));
         DataOutputStream out = new DataOutputStream(o);
         int count = 0;
         try {
@@ -793,71 +802,6 @@ class Reader {
                                 pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(midPix);
                             }
                     }
-                        /*int outerAvg = (int)(lineProperties[i][3]-lineProperties[i][1]);
-                        int midAvg = (int) (lineProperties[i][3] - lineProperties[i][2]);
-                        pixelData[cl.getY()][cl.getX()].setPixelValue(pixelData[cl.getY()][cl.getX()].getPixelValue() + midAvg);
-                       // pixelData[cl.getUpY()][cl.getUpX()].setPixelValue(pixelData[cl.getUpY()][cl.getUpX()].getPixelValue() + outerAvg);
-                        //pixelData[cl.getLowY()][cl.getLowX()].setPixelValue(pixelData[cl.getLowY()][cl.getLowX()].getPixelValue() + outerAvg);
-                        Slice temp = cl;
-                       /* while(cl.getY()+counter<cl.getLowY()-1)
-                        {
-                            counter++;
-                            System.out.println(pixelData[cl.getY() + counter][cl.getX()].getPixelValue() + midAvg + (test / test2) * counter);
-                            if(cl.getY()-counter>=cl.getUpY()){
-                                pixelData[cl.getY() - counter][cl.getX()].setPixelValue(pixelData[cl.getY() - counter][cl.getX()].getPixelValue() + midAvg + (test / test2) * counter);
-                            }
-                            pixelData[cl.getY() + counter][cl.getX()].setPixelValue(pixelData[cl.getY()+counter][cl.getX()].getPixelValue() + midAvg +(test/test2)*counter);
-
-
-                        while(temp.getY() <cl.getLowY()) {
-                            counter++;
-                            float sl = cl.returnSlope();
-                            if (sl > -0.05 && sl < 0.05) {
-                                temp = new Slice(temp.getY()+1, temp.getX());
-                            } else {
-                                int x = temp.getPerpY(temp.getY()+1);//bounds checking
-                                if (x > 519) {
-                                    x = 519;
-                                }
-                                temp = new Slice(temp.getY()+1, x);
-
-                            }
-                            if(temp.getY()==cl.getLowY())
-                            {
-                                pixelData[temp.getY()][temp.getX()].setPixelValue(pixelData[temp.getY()][temp.getX()].getPixelValue() + outerAvg);
-                            }
-                            else{
-                                pixelData[temp.getY()][temp.getX()].setPixelValue(pixelData[temp.getY()][temp.getX()].getPixelValue() + midAvg);
-
-                            }
-
-
-                        }
-                        temp=cl;
-                        counter=0;
-                        while(temp.getY() > cl.getUpY()) {
-                            float sl = cl.returnSlope();
-                            counter++;
-                            if (sl > -0.05 && sl < 0.05) {
-                                temp = new Slice(temp.getY()-1, temp.getX());
-                            } else {
-                                int x = temp.getPerpY(temp.getY()-1);//bounds checking
-                                if (x < 1) {
-                                    x = 1;
-                                }
-                                temp = new Slice(temp.getY()-1, x);
-
-                            }
-                            if(temp.getY()==cl.getLowY())
-                            {
-                                pixelData[temp.getY()][temp.getX()].setPixelValue(pixelData[temp.getY()][temp.getX()].getPixelValue() + outerAvg);
-                            }
-                            else{
-                                pixelData[temp.getY()][temp.getX()].setPixelValue(pixelData[temp.getY()][temp.getX()].getPixelValue() + midAvg);
-
-                            }
-                            */
-
 
 
 
@@ -888,6 +832,56 @@ class Reader {
 
             // close stuff
             out.close();
+
+
+            JFrame frame = new JFrame();
+            JPanel left = new JPanel();
+            JPanel right = new JPanel();
+            frame.setLayout(new GridLayout(0,2));
+            JLabel label = new JLabel();
+            JLabel label1 = new JLabel();
+            label.setText("Original Image");
+            label1.setText("Corrected Image");
+            Border b = BorderFactory.createLineBorder(Color.BLACK, 1, true);
+            label.setBorder(b);
+            label1.setBorder(b);
+            label.setBackground(Color.red);
+            label.setOpaque(true);
+            left.setLayout(new BoxLayout(left,BoxLayout.Y_AXIS));
+            right.setLayout(new BoxLayout(right,BoxLayout.Y_AXIS));
+
+
+
+
+            SourceImage img = new SourceImage(outputString+"Output.dcm");
+            SingleImagePanel single = new SingleImagePanel(img);
+            label1.setBackground(Color.green);
+            label1.setOpaque(true);
+            left.add(label1);
+
+            left.add(single);
+
+
+
+            SourceImage img2 = new SourceImage(inputString);
+            SingleImagePanel single2 = new SingleImagePanel(img2);
+
+            left.setBackground(Color.white);
+            right.setBackground(Color.white);
+            right.add(label);
+            right.add(single2);
+            char c = (char)153;
+            frame.setTitle("Beam Hardening Solutions "+ (char)174);
+            frame.add(left);
+            frame.add(right);
+
+            frame.setSize(img.getWidth()*2,img.getHeight());
+            frame.setVisible(true);
+
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -930,5 +924,40 @@ class Reader {
     private static boolean checkRange(Pixel p) {
         //soft tissue(760-860)
         return (p.getPixelValue() >= 760 && p.getPixelValue() <= 900) || p.getPixelValue() > 4000 || p.getPixelValue() == 0;
+    }
+    private static String promptForFile()
+    {
+        JFrame f = new JFrame();
+        f.setTitle("Beam Hardening Solutions "+(char)153);
+
+        JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Dicom Files","dcm");
+        fc.setFileFilter(filter);
+        int returnVal = fc.showOpenDialog(f);
+        if(returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            return fc.getSelectedFile().getAbsolutePath();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    private static String getOutputFile(String input)
+    {
+        String output;
+        int i;
+        for(i = input.length()-1;i >= 0 ; i--)
+        {
+
+            if(input.charAt(i)=='/')
+            {
+                break;
+            }
+
+        }
+        output=input.substring(0,i+1);
+        System.out.println(""+output);
+        return output;
     }
 }
