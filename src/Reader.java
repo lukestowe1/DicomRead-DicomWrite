@@ -410,7 +410,6 @@ class Reader {
                                 }
                                 lower=mover;
                                 mid.setLimit(upper, lower, outUpper, outLower);//link mid with its limit points
-
                                  upperPix = pixelData[upper.getX()][upper.getY()].getPixelValue();
                                  midPix = pixelData[mid.getY()][mid.getX()].getPixelValue();
                                  lowerPix = pixelData[lower.getY()][lower.getX()].getPixelValue();
@@ -502,9 +501,7 @@ class Reader {
             }
             System.out.println("count fill"+ countFill);
             for (Slice sl : middleEdge) {
-                pixelData[sl.returnUpper().getY()][sl.returnUpper().getX()].setPixelValue(2000);
-                pixelData[sl.returnLower().getY()][sl.returnLower().getX()].setPixelValue(2000);
-                pixelData[sl.getY()][sl.getX()].setPixelValue(2000);
+
                     int counter = 1;
                     for (int i = 0; i < countFill; i++) {
                         if (lineProperties[i][0] == sl.returnSlope1()) {
@@ -520,12 +517,9 @@ class Reader {
                                 counter++;
 
                                 while (temp.getY() <= sl.getLowY()) {
-                                    int k = 0;
-                                    if(counter == 3)
-                                        //System.out.println(pixelData[temp.getY()][temp.getX()].getPixelValue());
-                                    if (pixelData[temp.getY()][temp.getX()].getPixelValue() < 1300 && pixelData[temp.getY()][temp.getX()].getPixelValue() > 100) {
+
+                                    if (pixelData[temp.getY()][temp.getX()].getPixelValue() < 1300 && pixelData[temp.getY()][temp.getX()].getPixelValue() > 100)
                                         lineProperties[i][counter] += pixelData[temp.getY()][temp.getX()].getPixelValue();
-                                    }
 
 
                                     //System.out.println("Adding " + pixelData[temp.getY()][temp.getX()].getPixelValue()+"temp"+ temp.getY()+" ----" + temp.getX()+" "+sl.returnSlope());
@@ -554,7 +548,14 @@ class Reader {
                     }
                 }
             }
-
+            for(int i = 0; i< 300; i++)
+                            {
+                                        for(int j = 100; j <500; j++ )
+                                {
+                                            System.out.printf("%5d ", pixelData[i][j].getPixelValue());
+                            }
+                            System.out.println();
+                      }
             for (int i = 0; i < countFill; i++) {
 
                 for (int j = 1; j < max; j+=2) {
@@ -608,9 +609,9 @@ class Reader {
                             int down = pixelData[tempDown.getY()][tempDown.getX()].getPixelValue() + (int) (lineProperties[i][1]-lineProperties[i][counter]);
                             if(pixelData[tempUp.getY()][tempUp.getX()].getPixelValue()>100 && up >300) {
 
-                                //pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(up);
-                                //if(down > 300)
-                                   // pixelData[tempDown.getY()][tempDown.getX()].setPixelValue(down);
+                                pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(up);
+                                if(down > 300)
+                                    pixelData[tempDown.getY()][tempDown.getX()].setPixelValue(down);
                             }
                             counter+=2;
                         }
@@ -618,7 +619,7 @@ class Reader {
                             int midPix = pixelData[tempUp.getY()][tempUp.getX()].getPixelValue() + (int) (lineProperties[i][1] - lineProperties[i][3]);
                             if(pixelData[tempUp.getY()][tempUp.getX()].getPixelValue()>100 && midPix >300) {
 
-                                //pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(midPix);
+                                pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(midPix);
                             }
                     }
 
