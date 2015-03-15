@@ -83,7 +83,7 @@ public class Slice extends Point {
     }
     int returnOutAvg()
     {
-        if(Math.abs(outUpperInt-outLowerInt)>340)
+        if(Math.abs(outUpperInt-outLowerInt)>340 || (outUpperInt > 1150 && outLowerInt > 1150))
             return 341;
         else
             return outerAvg;
