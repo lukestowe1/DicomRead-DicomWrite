@@ -575,6 +575,9 @@ class Reader {
             }
 
             for (Slice cl : middleEdge) {
+                pixelData[cl.getLowY()][cl.getLowX()].setPixelValue(2000);
+                pixelData[cl.getUpY()][cl.getUpX()].setPixelValue(2000);
+                pixelData[cl.getY()][cl.getX()].setPixelValue(2000);
                 int counter = 5;
                 for (int i = 0; i < countFill; i++) {
 
@@ -609,18 +612,18 @@ class Reader {
                             int down = pixelData[tempDown.getY()][tempDown.getX()].getPixelValue() + (int) (lineProperties[i][1]-lineProperties[i][counter]);
                             if(pixelData[tempUp.getY()][tempUp.getX()].getPixelValue()>100 && up >300) {
 
-                                pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(up);
-                                if(down > 300)
-                                    pixelData[tempDown.getY()][tempDown.getX()].setPixelValue(down);
+                                //pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(up);
+                                //if(down > 300)
+                                    //pixelData[tempDown.getY()][tempDown.getX()].setPixelValue(down);
                             }
                             counter+=2;
                         }
                             tempUp = cl;
                             int midPix = pixelData[tempUp.getY()][tempUp.getX()].getPixelValue() + (int) (lineProperties[i][1] - lineProperties[i][3]);
-                            if(pixelData[tempUp.getY()][tempUp.getX()].getPixelValue()>100 && midPix >300) {
+                            //if(pixelData[tempUp.getY()][tempUp.getX()].getPixelValue()>100 && midPix >300) {
 
-                                pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(midPix);
-                            }
+                                //pixelData[tempUp.getY()][tempUp.getX()].setPixelValue(midPix);
+                           // }
                     }
 
 
