@@ -8,26 +8,22 @@ public class Pixel {
     private int firstIn;
     private int pixelValue;
 
-    Pixel(Byte b1,Byte b2)
-    {
-        first=b1;
-        second=b2;
-        firstIn = b1 & 0xffff;
+    Pixel(Byte b1, Byte b2) {
+        first = b1;
+        second = b2;
+        firstIn = b1 & 0xffff;//mask bits
         secondIn = b2 & 0xff;
         pixelValue = firstIn << 8 | secondIn;
 
     }
-    int getPixelValue()
-    {
+
+    int getPixelValue() {
         return pixelValue;
     }
-    void setPixelValue(int newValue)
-    {
-        pixelValue=newValue;
+
+    void setPixelValue(int newValue) {
+        pixelValue = newValue;
     }
-
-
-
 
 
 }
